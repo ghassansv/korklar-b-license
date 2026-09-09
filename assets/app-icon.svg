@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Körklar">
+  <rect width="512" height="512" rx="116" fill="#0b6760"/>
+  <path d="M364 86 426 148 148 426 86 364Z" fill="#ffcc66" opacity=".96"/>
+  <circle cx="256" cy="256" r="148" fill="#083f3c" stroke="#fff" stroke-width="16"/>
+  <path d="M187 145v222h49v-89l75 89h64l-99-116 91-106h-61l-70 84v-84Z" fill="#fff"/>
+</svg>

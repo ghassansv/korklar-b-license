@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b4f4a" />
+    <meta name="description" content="نموذج تفاعلي لأسئلة القيادة السويدية." />
+    <title>Körklar | تدريب القيادة</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/app-icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css?v=17" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Körklar - الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true">K</span>
+        <span>
+          <strong>KÖRKLAR</strong>
+          <small id="brand-subtitle">تدريب القيادة السويدية</small>
+        </span>
+      </a>
+      <div class="header-actions">
+        <label class="language-control" for="language-select">
+          <span class="sr-only">لغة التطبيق</span>
+          <select id="language-select" aria-label="لغة التطبيق">
+            <option value="ar">العربية</option>
+            <option value="sv">Svenska</option>
+            <option value="both">العربية + Svenska</option>
+          </select>
+        </label>
+        <button class="install-button" id="install-button" type="button" hidden>تثبيت التطبيق</button>
+        <span class="sample-badge" id="sample-badge">نسخة تجريبية</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="dashboard-view" id="dashboard-view">
+        <div class="dashboard-hero">
+          <div>
+            <span class="eyebrow" id="dashboard-eyebrow">خطة التدريب</span>
+            <h1 id="dashboard-title">اختبارات رخصة القيادة B</h1>
+            <p id="dashboard-description">18 اختبارًا، وكل اختبار نهائي سيضم 70 سؤالًا مختلطًا من مجالات Trafikverket الخمسة.</p>
+          </div>
+          <div class="plan-summary" aria-label="ملخص خطة الاختبارات">
+            <div><strong>18</strong><span id="tests-label">اختبارًا</span></div>
+            <div><strong>70</strong><span id="questions-label">سؤالًا لكل اختبار</span></div>
+            <div><strong>5</strong><span id="areas-label">مجالات في كل اختبار</span></div>
+          </div>
+        </div>
+
+        <section class="coverage-card" aria-labelledby="coverage-title">
+          <div>
+            <span class="eyebrow" id="coverage-kicker">Träningsområde</span>
+            <h2 id="coverage-title">كل اختبار يمزج المجالات الرسمية الخمسة</h2>
+          </div>
+          <div class="area-legend" id="area-legend"></div>
+        </section>
+
+        <nav class="dashboard-switch" aria-label="طريقة التدريب">
+          <button class="active" id="tests-tab-button" type="button">Prov 1–18</button>
+          <button id="areas-tab-button" type="button">Träna per område</button>
+          <button id="review-tab-button" type="button">المراجعة (7)</button>
+        </nav>
+
+        <p class="batch-status" id="batch-status" hidden></p>
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow" id="tests-kicker">اختر الاختبار</span>
+            <h2 id="tests-title">Prov 1–18</h2>
+          </div>
+          <p id="sample-note">Prov 1 متاح الآن كمعاينة من 5 أسئلة، سؤال واحد من كل مجال. تُضاف أسئلة الاختبارات الكاملة لاحقًا.</p>
+        </div>
+        <section class="test-grid" id="test-grid" aria-live="polite"></section>
+      </section>
+
+      <section class="app-shell" id="quiz-view" hidden>
+        <aside class="progress-panel" aria-label="ملخص التدريب">
+          <button class="back-home-button" id="back-home-button" type="button">← الاختبارات</button>
+          <div class="progress-heading">
+            <span class="eyebrow" id="progress-title">تقدمك</span>
+            <strong id="progress-label">1 / 5</strong>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <span id="progress-bar"></span>
+          </div>
+          <div class="stat-grid">
+            <div><strong id="correct-count">0</strong><span id="correct-label">صحيحة</span></div>
+            <div><strong id="incorrect-count">0</strong><span id="incorrect-label">خاطئة</span></div>
+            <div><strong id="bookmark-count">0</strong><span id="bookmark-label">محفوظة</span></div>
+            <div><strong id="sample-count">5</strong><span id="sample-size-label">أسئلة المعاينة</span></div>
+          </div>
+          <div class="mini-area-list" id="mini-area-list"></div>
+          <button class="reset-button" id="reset-button" type="button">إعادة الاختبار</button>
+        </aside>
+
+        <section class="quiz-card" aria-live="polite">
+          <div class="test-heading-row">
+            <strong id="active-test-title">Prov 1</strong>
+            <span id="preview-label">معاينة مختلطة</span>
+          </div>
+          <div class="question-meta">
+            <div class="taxonomy">
+              <span class="category-pill" id="category">السلامة المرورية</span>
+              <span class="topic-pill" id="topic">القيادة الدفاعية</span>
+            </div>
+            <div class="meta-actions">
+              <span id="question-number">السؤال 1 من 5</span>
+              <button class="bookmark-button" id="bookmark-button" type="button" aria-pressed="false">☆ حفظ</button>
+            </div>
+          </div>
+
+          <div class="question-layout">
+            <div class="question-copy" id="question-copy" dir="rtl">
+              <h1 id="question-text"></h1>
+              <div class="answers" id="answers" role="radiogroup" aria-label="Svarsalternativ"></div>
+            </div>
+            <figure class="question-media" id="media-wrap" hidden>
+              <img id="question-image" alt="" />
+              <figcaption id="image-caption"></figcaption>
+            </figure>
+          </div>
+
+          <div class="feedback" id="feedback" hidden></div>
+
+          <footer class="quiz-actions">
+            <button class="secondary-button" id="previous-button" type="button">السابق</button>
+            <button class="primary-button" id="next-button" type="button">التالي</button>
+          </footer>
+        </section>
+      </section>
+
+      <section class="result-view" id="result-view" hidden aria-live="polite">
+        <div class="result-card">
+          <span class="eyebrow" id="result-kicker">نتيجة المعاينة</span>
+          <h1 id="result-title">أكملت Prov 1</h1>
+          <div class="result-score"><strong id="result-score">0 / 5</strong><span id="result-message">نتيجتك</span></div>
+          <h2 id="area-result-title">النتيجة حسب Träningsområde</h2>
+          <div class="area-results" id="area-results"></div>
+          <div class="result-actions">
+            <button class="secondary-button" id="result-home-button" type="button">الاختبارات</button>
+            <button class="secondary-button" id="review-button" type="button">مراجعة الإجابات</button>
+            <button class="primary-button" id="retry-button" type="button">إعادة Prov 1</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="التنقل الرئيسي">
+      <button class="active" id="bottom-tests-button" type="button" data-tab="tests">
+        <span aria-hidden="true">▦</span><strong id="bottom-tests-label">الاختبارات</strong>
+      </button>
+      <button id="bottom-areas-button" type="button" data-tab="areas">
+        <span aria-hidden="true">◫</span><strong id="bottom-areas-label">المجالات</strong>
+      </button>
+      <button id="bottom-mistakes-button" type="button" data-tab="mistakes">
+        <span aria-hidden="true">↻</span><strong id="bottom-mistakes-label">الأخطاء</strong><em id="bottom-mistakes-count">0</em>
+      </button>
+      <button id="bottom-saved-button" type="button" data-tab="saved">
+        <span aria-hidden="true">★</span><strong id="bottom-saved-label">المحفوظة</strong><em id="bottom-saved-count">0</em>
+      </button>
+    </nav>
+
+    <script src="./data/batch1-raw.js?v=17"></script>
+    <script src="./data/batch1-ar.js?v=17"></script>
+    <script src="./data/batch1-review-ar.js?v=17"></script>
+    <script src="./data/remaining-enriched.js?v=17"></script>
+    <script src="./data/resolved-review.js?v=17"></script>
+    <script src="./app.js?v=17"></script>
+  </body>
+</html>
