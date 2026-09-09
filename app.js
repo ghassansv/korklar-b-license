@@ -494,6 +494,7 @@ const remainingEnrichedQuestions = Array.isArray(window.KORKLAR_REMAINING_ENRICH
   ? window.KORKLAR_REMAINING_ENRICHED
   : [];
 const resolvedReviewDefaults = window.KORKLAR_RESOLVED_REVIEW || {};
+const prov1ArabicOverrides = window.KORKLAR_PROV1_GPT_AR || {};
 const REVIEW_STORAGE_KEY = "korklar-batch1-review-v1";
 
 function loadReviewDecisions() {
@@ -605,11 +606,27 @@ const allImportedQuestionIds = new Set([
   ...remainingEnrichedQuestions
 ].map((question) => question.id));
 const verifiedPdfQuestions = [...batchQuestions, ...remainingVerifiedQuestions];
+function applyArabicOverride(question) {
+  const override = prov1ArabicOverrides[question.id];
+  if (!override) return question;
+  if (!Array.isArray(override.answersAr) || override.answersAr.length !== question.answers.length) {
+    throw new Error(`Prov 1 Arabic answer count does not match ${question.id}`);
+  }
+  return {
+    ...question,
+    textAr: override.textAr,
+    answersAr: override.answersAr,
+    explanation: override.explanation,
+    machineTranslated: false,
+    gptTranslated: true
+  };
+}
+
 const allQuestions = [
   ...builtInQuestions.filter((question) => !allImportedQuestionIds.has(question.id)),
   ...verifiedPdfQuestions,
   ...reviewedBatchQuestions
-];
+].map(applyArabicOverride);
 
 const officialAreas = {
   vehicle: { ar: "معرفة المركبة والتحكم بها", sv: "Fordonskännedom och manövrering" },
