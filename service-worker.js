@@ -1,14 +1,14 @@
-const CACHE_NAME = "korklar-sample-v17";
+const CACHE_NAME = "korklar-sample-v18";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=17",
-  "./data/batch1-raw.js?v=17",
-  "./data/batch1-ar.js?v=17",
-  "./data/batch1-review-ar.js?v=17",
-  "./data/remaining-enriched.js?v=17",
-  "./data/resolved-review.js?v=17",
-  "./app.js?v=17",
+  "./styles.css?v=18",
+  "./data/batch1-raw.js?v=18",
+  "./data/batch1-ar.js?v=18",
+  "./data/batch1-review-ar.js?v=18",
+  "./data/remaining-enriched.js?v=18",
+  "./data/resolved-review.js?v=18",
+  "./app.js?v=18",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
   "./assets/accessible-parking.webp",
