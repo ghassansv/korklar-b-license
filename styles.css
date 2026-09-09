@@ -836,6 +836,16 @@ h1 {
 .feedback.good { color: #126445; background: #e3f7ed; }
 .feedback.bad { color: #96363a; background: #fff0f0; }
 
+.answer-explanations { margin-block: 1rem; color: var(--ink, #183c38); text-align: start; }
+.content-note { padding: 1rem; background: #fff3cd; color: #654900; border-radius: 12px; }
+.answer-reason { padding: 1rem; border-radius: 14px; background: #fff; overflow-wrap: anywhere; }
+.answer-reason h3 { font-size: 1.05rem; margin: 0 0 .7rem; }
+.correct-reason { border-inline-start: 4px solid #20875e; }
+.wrong-reasons { margin-block-start: .9rem; }
+.wrong-reasons summary { cursor: pointer; font-weight: 700; padding: .7rem .2rem; }
+.wrong-reasons summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.wrong-reasons .answer-reason { margin-block-start: .6rem; border-inline-start: 4px solid #b56a45; }
+
 .quiz-actions {
   display: flex;
   justify-content: space-between;

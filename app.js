@@ -494,7 +494,11 @@ const remainingEnrichedQuestions = Array.isArray(window.KORKLAR_REMAINING_ENRICH
   ? window.KORKLAR_REMAINING_ENRICHED
   : [];
 const resolvedReviewDefaults = window.KORKLAR_RESOLVED_REVIEW || {};
-const prov1ArabicOverrides = window.KORKLAR_PROV1_GPT_AR || {};
+const arabicOverrides = {
+  ...(window.KORKLAR_PROV1_GPT_AR || {}),
+  ...(window.KORKLAR_PROV2_GPT_AR || {}),
+  ...(window.KORKLAR_RULES100_GPT_AR || {})
+};
 const REVIEW_STORAGE_KEY = "korklar-batch1-review-v1";
 
 function loadReviewDecisions() {
@@ -607,16 +611,19 @@ const allImportedQuestionIds = new Set([
 ].map((question) => question.id));
 const verifiedPdfQuestions = [...batchQuestions, ...remainingVerifiedQuestions];
 function applyArabicOverride(question) {
-  const override = prov1ArabicOverrides[question.id];
+  const override = arabicOverrides[question.id];
   if (!override) return question;
   if (!Array.isArray(override.answersAr) || override.answersAr.length !== question.answers.length) {
-    throw new Error(`Prov 1 Arabic answer count does not match ${question.id}`);
+    throw new Error(`Arabic answer count does not match ${question.id}`);
   }
   return {
     ...question,
     textAr: override.textAr,
     answersAr: override.answersAr,
-    explanation: override.explanation,
+    explanation: override.answerReasonsAr?.[question.correct] || override.explanation,
+    answerReasonsAr: override.answerReasonsAr,
+    learningSource: override.learningSource,
+    contentNoteAr: override.contentNoteAr,
     machineTranslated: false,
     gptTranslated: true
   };
@@ -1744,15 +1751,51 @@ function renderQuiz() {
     result.textContent = isCorrect
       ? textFor("correctResult")
       : textFor("wrongResult", displayedAnswer(question, question.correct));
-    const explanation = document.createElement("p");
-    appendMachineTranslatedContent(explanation, question, question.explanation, question.explanationSv);
-    const source = document.createElement("a");
-    source.className = "source-link";
-    source.href = question.sourceUrl;
-    source.target = "_blank";
-    source.rel = "noreferrer";
-    source.textContent = `${textFor("source")}: ${question.sourceLabel}`;
-    elements.feedback.append(result, explanation, source);
+    const explanation = document.createElement("div");
+    if (currentLanguage === "ar" && question.answerReasonsAr?.length === question.answers.length) {
+      explanation.className = "answer-explanations";
+      if (question.contentNoteAr) {
+        result.textContent = "تنبيه: هذا السؤال يحتاج إلى تحديث";
+        const note = document.createElement("p");
+        note.className = "content-note";
+        note.textContent = question.contentNoteAr;
+        explanation.append(note);
+      }
+      const correctReason = document.createElement("section");
+      correctReason.className = "answer-reason correct-reason";
+      const heading = document.createElement("h3");
+      heading.textContent = question.contentNoteAr ? "توضيح الإجابة المسجّلة" : "لماذا هذه الإجابة صحيحة؟";
+      const answer = document.createElement("strong");
+      answer.textContent = displayedAnswer(question, question.correct);
+      const reason = document.createElement("p");
+      reason.textContent = question.answerReasonsAr[question.correct];
+      correctReason.append(heading, answer, reason);
+      explanation.append(correctReason);
+
+      const alternatives = document.createElement("details");
+      alternatives.className = "wrong-reasons";
+      alternatives.open = !isCorrect;
+      const summary = document.createElement("summary");
+      summary.textContent = "لماذا الخيارات الأخرى غير صحيحة؟";
+      alternatives.append(summary);
+      question.answerReasonsAr.forEach((text, index) => {
+        if (index === question.correct) return;
+        const item = document.createElement("section");
+        item.className = "answer-reason";
+        const label = document.createElement("strong");
+        label.textContent = `${index === response ? "اختيارك: " : ""}${displayedAnswer(question, index)}`;
+        const detail = document.createElement("p");
+        detail.textContent = text;
+        item.append(label, detail);
+        alternatives.append(item);
+      });
+      explanation.append(alternatives);
+    } else {
+      const paragraph = document.createElement("p");
+      appendMachineTranslatedContent(paragraph, question, question.explanation, question.explanationSv);
+      explanation.append(paragraph);
+    }
+    elements.feedback.append(result, explanation);
   }
 
   elements.previous.disabled = testState.current === 0;
