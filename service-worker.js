@@ -1,8 +1,8 @@
-const CACHE_NAME = "korklar-sample-v29";
+const CACHE_NAME = "korklar-sample-v30";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=29",
+  "./styles.css?v=30",
   "./data/batch1-raw.js?v=29",
   "./data/batch1-ar.js?v=29",
   "./data/batch1-review-ar.js?v=29",
