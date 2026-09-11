@@ -587,6 +587,11 @@ button { cursor: pointer; }
 .app-shell.exam-mode .stat-grid,
 .app-shell.exam-mode .mini-area-list { display: none; }
 
+.app-shell.exam-mode #preview-label,
+.app-shell.exam-mode .taxonomy { display: none; }
+
+.app-shell.exam-mode .question-meta { justify-content: flex-end; }
+
 .progress-heading {
   display: flex;
   justify-content: space-between;
