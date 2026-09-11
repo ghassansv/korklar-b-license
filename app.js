@@ -1747,6 +1747,8 @@ function renderQuiz() {
     appendMachineTranslatedContent(label, question, question.answersAr[index], answer);
     button.append(dot, label);
 
+    if (response === index) button.classList.add("selected");
+
     if (response !== null && revealAnswer) {
       button.disabled = true;
       if (index === question.correct) button.classList.add("correct");
