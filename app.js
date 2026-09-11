@@ -748,6 +748,14 @@ activityDefinitions.filter((test) => test.available).forEach((test) => {
 
 const interfaceText = {
   ar: {
+    landingKicker: "اختر طريقة الدراسة",
+    landingTitle: "كيف تريد أن تبدأ؟",
+    trainingCardTitle: "Träna",
+    trainingCardNote: "تدرّب حسب المجال واعرف فورًا هل إجابتك صحيحة ولماذا.",
+    examCardTitle: "Prova",
+    examCardNote: "أجب عن 70 سؤالًا ثم شاهد النتيجة في النهاية.",
+    passed: "ناجح",
+    failed: "غير ناجح",
     brandSubtitle: "تدريب القيادة السويدية",
     sample: "1260 سؤالًا",
     install: "تثبيت التطبيق",
@@ -828,8 +836,9 @@ const interfaceText = {
     review: "مراجعة الإجابات",
     retry: (number) => `إعادة Prov ${number}`,
     retryArea: "إعادة تدريب المجال",
+    bottomHome: "الرئيسية",
     bottomTests: "الاختبارات",
-    bottomAreas: "المجالات",
+    bottomAreas: "التدريب",
     bottomMistakes: "الأخطاء",
     bottomSaved: "المحفوظة",
     mistakesKicker: "تدريب ذكي",
@@ -853,6 +862,14 @@ const interfaceText = {
     retryCollection: "إعادة التدريب"
   },
   sv: {
+    landingKicker: "Välj studiesätt",
+    landingTitle: "Hur vill du börja?",
+    trainingCardTitle: "Träna",
+    trainingCardNote: "Träna per område och få svar och förklaring direkt.",
+    examCardTitle: "Prova",
+    examCardNote: "Besvara 70 frågor och se resultatet när du lämnar in.",
+    passed: "Godkänd",
+    failed: "Inte godkänd",
     brandSubtitle: "Svensk körkortsträning",
     sample: "1260 frågor",
     install: "Installera",
@@ -933,8 +950,9 @@ const interfaceText = {
     review: "Granska svar",
     retry: (number) => `Gör om Prov ${number}`,
     retryArea: "Träna området igen",
+    bottomHome: "Hem",
     bottomTests: "Prov",
-    bottomAreas: "Områden",
+    bottomAreas: "Träna",
     bottomMistakes: "Fel",
     bottomSaved: "Sparade",
     mistakesKicker: "Smart träning",
@@ -958,6 +976,14 @@ const interfaceText = {
     retryCollection: "Träna igen"
   },
   both: {
+    landingKicker: "اختر طريقة الدراسة · Välj studiesätt",
+    landingTitle: "كيف تريد أن تبدأ؟ · Hur vill du börja?",
+    trainingCardTitle: "Träna · التدريب",
+    trainingCardNote: "تدريب حسب المجال مع تصحيح فوري · Träna per område med direkt återkoppling.",
+    examCardTitle: "Prova · الاختبار",
+    examCardNote: "70 سؤالًا والنتيجة بعد التسليم · 70 frågor, resultat efter inlämning.",
+    passed: "ناجح · Godkänd",
+    failed: "غير ناجح · Inte godkänd",
     brandSubtitle: "تدريب القيادة · Svensk körkortsträning",
     sample: "1260 سؤالًا · frågor",
     install: "تثبيت · Installera",
@@ -1038,8 +1064,9 @@ const interfaceText = {
     review: "مراجعة · Granska svar",
     retry: (number) => `إعادة Prov ${number} · Gör om`,
     retryArea: "إعادة المجال · Träna igen",
+    bottomHome: "الرئيسية · Hem",
     bottomTests: "الاختبارات · Prov",
-    bottomAreas: "المجالات · Områden",
+    bottomAreas: "التدريب · Träna",
     bottomMistakes: "الأخطاء · Fel",
     bottomSaved: "المحفوظة · Sparade",
     mistakesKicker: "تدريب ذكي · Smart träning",
@@ -1069,7 +1096,7 @@ let currentLanguage = localStorage.getItem("korklar-language") || "ar";
 if (!interfaceText[currentLanguage]) currentLanguage = "ar";
 
 const appState = {
-  view: "home",
+  view: "landing",
   dashboardTab: "tests",
   activeTestId: null,
   tests: {},
@@ -1078,6 +1105,15 @@ const appState = {
 };
 
 const elements = {
+  landingView: document.querySelector("#landing-view"),
+  landingKicker: document.querySelector("#landing-kicker"),
+  landingTitle: document.querySelector("#landing-title"),
+  trainingCardTitle: document.querySelector("#training-card-title"),
+  trainingCardNote: document.querySelector("#training-card-note"),
+  examCardTitle: document.querySelector("#exam-card-title"),
+  examCardNote: document.querySelector("#exam-card-note"),
+  startTraining: document.querySelector("#start-training-button"),
+  startExams: document.querySelector("#start-exams-button"),
   brandSubtitle: document.querySelector("#brand-subtitle"),
   sampleBadge: document.querySelector("#sample-badge"),
   language: document.querySelector("#language-select"),
@@ -1085,22 +1121,7 @@ const elements = {
   dashboardView: document.querySelector("#dashboard-view"),
   quizView: document.querySelector("#quiz-view"),
   resultView: document.querySelector("#result-view"),
-  dashboardEyebrow: document.querySelector("#dashboard-eyebrow"),
-  dashboardTitle: document.querySelector("#dashboard-title"),
-  dashboardDescription: document.querySelector("#dashboard-description"),
-  testsLabel: document.querySelector("#tests-label"),
-  questionsLabel: document.querySelector("#questions-label"),
-  areasLabel: document.querySelector("#areas-label"),
-  coverageKicker: document.querySelector("#coverage-kicker"),
-  coverageTitle: document.querySelector("#coverage-title"),
-  testsKicker: document.querySelector("#tests-kicker"),
   testsTitle: document.querySelector("#tests-title"),
-  sampleNote: document.querySelector("#sample-note"),
-  testsTab: document.querySelector("#tests-tab-button"),
-  areasTab: document.querySelector("#areas-tab-button"),
-  reviewTab: document.querySelector("#review-tab-button"),
-  batchStatus: document.querySelector("#batch-status"),
-  areaLegend: document.querySelector("#area-legend"),
   testGrid: document.querySelector("#test-grid"),
   backHome: document.querySelector("#back-home-button"),
   progressTitle: document.querySelector("#progress-title"),
@@ -1141,15 +1162,14 @@ const elements = {
   review: document.querySelector("#review-button"),
   retry: document.querySelector("#retry-button"),
   bottomNav: document.querySelector("#mobile-bottom-nav"),
+  bottomHome: document.querySelector("#bottom-home-button"),
   bottomTests: document.querySelector("#bottom-tests-button"),
   bottomAreas: document.querySelector("#bottom-areas-button"),
-  bottomMistakes: document.querySelector("#bottom-mistakes-button"),
   bottomSaved: document.querySelector("#bottom-saved-button"),
+  bottomHomeLabel: document.querySelector("#bottom-home-label"),
   bottomTestsLabel: document.querySelector("#bottom-tests-label"),
   bottomAreasLabel: document.querySelector("#bottom-areas-label"),
-  bottomMistakesLabel: document.querySelector("#bottom-mistakes-label"),
   bottomSavedLabel: document.querySelector("#bottom-saved-label"),
-  bottomMistakesCount: document.querySelector("#bottom-mistakes-count"),
   bottomSavedCount: document.querySelector("#bottom-saved-count")
 };
 
@@ -1202,7 +1222,31 @@ function areaLabel(areaKey) {
 }
 
 function blankTestState() {
-  return { current: 0, responses: {}, bookmarks: [], completed: false, lastScore: 0 };
+  return { current: 0, responses: {}, bookmarks: [], completed: false, reviewing: false, excludedIds: [], lastScore: 0 };
+}
+
+function ensureExamExclusions(test, testState) {
+  if (test?.type !== "test") return;
+  const valid = Array.isArray(testState.excludedIds)
+    && testState.excludedIds.length === 5
+    && testState.excludedIds.every((id) => test.questionIds.includes(id));
+  if (valid) return;
+  const shuffled = [...test.questionIds];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swap = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swap]] = [shuffled[swap], shuffled[index]];
+  }
+  testState.excludedIds = shuffled.slice(0, 5);
+}
+
+function scoredQuestions(questions, test, testState) {
+  if (test?.type !== "test") return questions;
+  const excluded = new Set(testState.excludedIds || []);
+  return questions.filter((question) => !excluded.has(question.id));
+}
+
+function examPassed(score) {
+  return score >= 52;
 }
 
 function normalizedCollectionIds(ids) {
@@ -1279,7 +1323,8 @@ function restoreState() {
     );
     appState.bookmarks = normalizedCollectionIds(saved.bookmarks || legacyBookmarks);
     appState.mistakes = normalizedCollectionIds(saved.mistakes || legacyMistakes);
-    if (["areas", "review", "mistakes", "saved"].includes(saved.dashboardTab)) appState.dashboardTab = saved.dashboardTab;
+    if (["areas", "saved"].includes(saved.dashboardTab)) appState.dashboardTab = saved.dashboardTab;
+    if (saved.dashboardTab === "mistakes") appState.dashboardTab = "areas";
     if (getTestDefinition(saved.activeTestId)) appState.activeTestId = saved.activeTestId;
   } catch (_) {
     localStorage.removeItem(STORAGE_KEY);
@@ -1291,24 +1336,16 @@ function renderInterfaceText() {
   document.documentElement.dir = currentLanguage === "sv" ? "ltr" : "rtl";
   elements.language.value = currentLanguage;
   elements.language.setAttribute("aria-label", currentLanguage === "sv" ? "Appens språk" : "لغة التطبيق");
+  elements.landingKicker.textContent = textFor("landingKicker");
+  elements.landingTitle.textContent = textFor("landingTitle");
+  elements.trainingCardTitle.textContent = textFor("trainingCardTitle");
+  elements.trainingCardNote.textContent = textFor("trainingCardNote");
+  elements.examCardTitle.textContent = textFor("examCardTitle");
+  elements.examCardNote.textContent = textFor("examCardNote");
   elements.brandSubtitle.textContent = textFor("brandSubtitle");
   elements.sampleBadge.textContent = textFor("sample");
   elements.install.textContent = textFor("install");
-  elements.dashboardEyebrow.textContent = textFor("dashboardEyebrow");
-  elements.dashboardTitle.textContent = textFor("dashboardTitle");
-  elements.dashboardDescription.textContent = textFor("dashboardDescription");
-  elements.testsLabel.textContent = textFor("testsLabel");
-  elements.questionsLabel.textContent = textFor("questionsLabel");
-  elements.areasLabel.textContent = textFor("areasLabel");
-  elements.coverageKicker.textContent = textFor("coverageKicker");
-  elements.coverageTitle.textContent = textFor("coverageTitle");
-  elements.testsKicker.textContent = textFor("testsKicker");
   elements.testsTitle.textContent = textFor("testsTitle");
-  elements.sampleNote.textContent = textFor("sampleNote");
-  elements.testsTab.textContent = textFor("testsTab");
-  elements.areasTab.textContent = textFor("areasTab");
-  elements.reviewTab.textContent = textFor("reviewTab", pendingReviewQuestions.length);
-  elements.batchStatus.textContent = textFor("batchStatus", trainingQuestionIds.length, pendingReviewQuestions.length - reviewedBatchQuestions.length);
   elements.backHome.textContent = textFor("backHome");
   elements.progressTitle.textContent = textFor("progress");
   elements.correctLabel.textContent = textFor("correct");
@@ -1321,22 +1358,23 @@ function renderInterfaceText() {
   elements.areaResultTitle.textContent = textFor("areaResultTitle");
   elements.resultHome.textContent = textFor("resultHome");
   elements.review.textContent = textFor("review");
+  elements.bottomHomeLabel.textContent = textFor("bottomHome");
   elements.bottomTestsLabel.textContent = textFor("bottomTests");
   elements.bottomAreasLabel.textContent = textFor("bottomAreas");
-  elements.bottomMistakesLabel.textContent = textFor("bottomMistakes");
   elements.bottomSavedLabel.textContent = textFor("bottomSaved");
   elements.bottomNav.setAttribute("aria-label", currentLanguage === "sv" ? "Huvudnavigering" : "التنقل الرئيسي");
 }
 
 function activeBottomTab() {
+  if (appState.view === "landing") return "home";
   if (appState.view === "home") {
-    return ["tests", "areas", "mistakes", "saved"].includes(appState.dashboardTab)
+    return ["tests", "areas", "saved"].includes(appState.dashboardTab)
       ? appState.dashboardTab
       : "tests";
   }
   const activeTest = getTestDefinition();
   if (activeTest?.type === "area") return "areas";
-  if (activeTest?.collectionKey === "mistakes") return "mistakes";
+  if (activeTest?.collectionKey === "mistakes") return "areas";
   if (activeTest?.collectionKey === "bookmarks") return "saved";
   return "tests";
 }
@@ -1344,9 +1382,9 @@ function activeBottomTab() {
 function renderBottomNavigation() {
   const currentTab = activeBottomTab();
   const buttons = {
+    home: elements.bottomHome,
     tests: elements.bottomTests,
     areas: elements.bottomAreas,
-    mistakes: elements.bottomMistakes,
     saved: elements.bottomSaved
   };
   Object.entries(buttons).forEach(([tab, button]) => {
@@ -1354,8 +1392,6 @@ function renderBottomNavigation() {
     if (tab === currentTab) button.setAttribute("aria-current", "page");
     else button.removeAttribute("aria-current");
   });
-  elements.bottomMistakesCount.textContent = String(normalizedCollectionIds(appState.mistakes).length);
-  elements.bottomMistakesCount.dataset.count = String(normalizedCollectionIds(appState.mistakes).length);
   elements.bottomSavedCount.textContent = String(normalizedCollectionIds(appState.bookmarks).length);
   elements.bottomSavedCount.dataset.count = String(normalizedCollectionIds(appState.bookmarks).length);
 }
@@ -1367,29 +1403,18 @@ function makeAreaPill(areaKey, compact = false) {
   return pill;
 }
 
-function renderAreaLegend() {
-  elements.areaLegend.replaceChildren(...areaOrder.map((areaKey) => makeAreaPill(areaKey)));
-}
+
 
 function renderDashboard() {
-  renderAreaLegend();
+  if (appState.dashboardTab === "review") appState.dashboardTab = "tests";
+
   elements.testGrid.replaceChildren();
   const showingAreas = appState.dashboardTab === "areas";
   const showingReview = appState.dashboardTab === "review";
-  const showingMistakes = appState.dashboardTab === "mistakes";
+  const showingMistakes = false;
   const showingSaved = appState.dashboardTab === "saved";
   const showingCollection = showingMistakes || showingSaved;
   const showingTests = !showingAreas && !showingReview && !showingCollection;
-  elements.testsTab.classList.toggle("active", showingTests);
-  elements.areasTab.classList.toggle("active", showingAreas);
-  elements.reviewTab.classList.toggle("active", showingReview);
-  elements.testsTab.setAttribute("aria-pressed", showingTests ? "true" : "false");
-  elements.areasTab.setAttribute("aria-pressed", showingAreas ? "true" : "false");
-  elements.reviewTab.setAttribute("aria-pressed", showingReview ? "true" : "false");
-  elements.batchStatus.hidden = showingTests || showingCollection;
-  elements.batchStatus.textContent = showingReview
-    ? textFor("reviewStatus", reviewedBatchQuestions.length, pendingReviewQuestions.length)
-    : textFor("batchStatus", trainingQuestionIds.length, pendingReviewQuestions.length - reviewedBatchQuestions.length);
   const headingKeys = showingMistakes
     ? ["mistakesKicker", "mistakesTitle", "mistakesNote"]
     : showingSaved
@@ -1399,9 +1424,7 @@ function renderDashboard() {
     : showingAreas
       ? ["areasKicker", "areasTitle", "areasNote"]
       : ["testsKicker", "testsTitle", "sampleNote"];
-  elements.testsKicker.textContent = textFor(headingKeys[0]);
-  elements.testsTitle.textContent = textFor(headingKeys[1]);
-  elements.sampleNote.textContent = textFor(headingKeys[2]);
+  elements.testsTitle.textContent = showingAreas ? textFor("areasTab") : showingTests ? textFor("bottomTests") : textFor(headingKeys[1]);
   elements.testGrid.classList.toggle("review-grid", showingReview);
   if (showingReview) {
     renderReviewCards();
@@ -1412,7 +1435,7 @@ function renderDashboard() {
     : showingSaved
       ? [collectionDefinition("bookmarks")]
       : showingAreas
-        ? trainingDefinitions
+        ? [...trainingDefinitions, collectionDefinition("mistakes")]
         : testDefinitions;
   if (showingCollection && !definitions[0].questionIds.length) {
     const empty = document.createElement("div");
@@ -1430,9 +1453,10 @@ function renderDashboard() {
   definitions.forEach((test) => {
     const questions = questionsForTest(test);
     const testState = getTestState(test.id, false);
+    if (test.type === "test" && appState.tests[test.id]) ensureExamExclusions(test, testState);
     const answered = answeredFor(questions, testState);
-    const score = scoreFor(questions, testState);
-    const isCompleted = questions.length > 0 && answered === questions.length;
+    const score = scoreFor(scoredQuestions(questions, test, testState), testState);
+    const isCompleted = test.type === "test" ? Boolean(testState.completed) : questions.length > 0 && answered === questions.length;
     const card = document.createElement("article");
     card.className = `test-card${test.available ? " available" : " locked"}${isCompleted ? " completed" : ""}${test.type === "area" ? " area-training" : ""}`;
 
@@ -1453,7 +1477,8 @@ function renderDashboard() {
       : test.available
         ? textFor("preview")
         : textFor("coming");
-    top.append(title, badge);
+    top.append(title);
+    if (test.type !== "area") top.append(badge);
 
     const details = document.createElement("div");
     details.className = "test-details";
@@ -1471,7 +1496,8 @@ function renderDashboard() {
       : test.type === "collection"
         ? test.requiredAreas.map((areaKey) => areaLabel(areaKey)).join(" · ")
         : `✓ ${textFor("allFive")}`;
-    details.append(questionCount, coverage);
+    details.append(questionCount);
+    if (test.type !== "area") details.append(coverage);
 
     const visual = document.createElement("div");
     if (test.type === "area" || test.type === "collection") {
@@ -1492,7 +1518,7 @@ function renderDashboard() {
     progressWrap.className = "card-progress";
     const progressText = document.createElement("span");
     if (!test.available) progressText.textContent = textFor("coming");
-    else if (isCompleted) progressText.textContent = textFor("completed", score, questions.length);
+    else if (isCompleted) progressText.textContent = textFor("completed", score, scoredQuestions(questions, test, testState).length);
     else if (answered > 0) progressText.textContent = textFor("inProgress", answered, questions.length);
     else progressText.textContent = textFor("notStarted");
     const track = document.createElement("span");
@@ -1681,6 +1707,9 @@ function renderQuiz() {
 
   const isAreaTraining = test.type === "area";
   const isCollectionTraining = test.type === "collection";
+  const isExam = test.type === "test";
+  const revealAnswer = !isExam || testState.reviewing;
+  elements.quizView.classList.toggle("exam-mode", isExam && !testState.reviewing);
   const collectionTitle = isCollectionTraining
     ? textFor(test.collectionKey === "mistakes" ? "mistakesTitle" : "savedTitle")
     : "";
@@ -1718,7 +1747,7 @@ function renderQuiz() {
     appendMachineTranslatedContent(label, question, question.answersAr[index], answer);
     button.append(dot, label);
 
-    if (response !== null) {
+    if (response !== null && revealAnswer) {
       button.disabled = true;
       if (index === question.correct) button.classList.add("correct");
       if (index === response && response !== question.correct) button.classList.add("wrong");
@@ -1739,7 +1768,7 @@ function renderQuiz() {
     elements.imageCaption.textContent = "";
   }
 
-  if (response === null) {
+  if (response === null || !revealAnswer) {
     elements.feedback.hidden = true;
   } else {
     const isCorrect = response === question.correct;
@@ -1772,24 +1801,7 @@ function renderQuiz() {
       correctReason.append(heading, answer, reason);
       explanation.append(correctReason);
 
-      const alternatives = document.createElement("details");
-      alternatives.className = "wrong-reasons";
-      alternatives.open = !isCorrect;
-      const summary = document.createElement("summary");
-      summary.textContent = "لماذا الخيارات الأخرى غير صحيحة؟";
-      alternatives.append(summary);
-      question.answerReasonsAr.forEach((text, index) => {
-        if (index === question.correct) return;
-        const item = document.createElement("section");
-        item.className = "answer-reason";
-        const label = document.createElement("strong");
-        label.textContent = `${index === response ? "اختيارك: " : ""}${displayedAnswer(question, index)}`;
-        const detail = document.createElement("p");
-        detail.textContent = text;
-        item.append(label, detail);
-        alternatives.append(item);
-      });
-      explanation.append(alternatives);
+
     } else {
       const paragraph = document.createElement("p");
       appendMachineTranslatedContent(paragraph, question, question.explanation, question.explanationSv);
@@ -1826,7 +1838,8 @@ function renderResult() {
   }
   const testState = getTestState();
   const answered = answeredFor(questions, testState);
-  const score = scoreFor(questions, testState);
+  const gradedQuestions = scoredQuestions(questions, test, testState);
+  const score = scoreFor(gradedQuestions, testState);
   const isAreaTraining = test.type === "area";
   const isCollectionTraining = test.type === "collection";
   const collectionTitle = isCollectionTraining
@@ -1842,8 +1855,10 @@ function renderResult() {
     : isCollectionTraining
       ? textFor("resultCollectionTitle", collectionTitle)
       : textFor("resultTitle", test.number);
-  elements.resultScore.textContent = `${score} / ${questions.length}`;
-  elements.resultMessage.textContent = textFor("resultMessage", answered, questions.length);
+  elements.resultScore.textContent = `${score} / ${gradedQuestions.length}`;
+  elements.resultMessage.textContent = test.type === "test"
+    ? `${textFor(examPassed(score) ? "passed" : "failed")} · ${textFor("resultMessage", answered, questions.length)}`
+    : textFor("resultMessage", answered, questions.length);
   elements.retry.textContent = isAreaTraining
     ? textFor("retryArea")
     : isCollectionTraining
@@ -1852,7 +1867,7 @@ function renderResult() {
   elements.areaResults.replaceChildren();
 
   test.requiredAreas.forEach((areaKey) => {
-    const areaQuestions = questions.filter((question) => question.officialArea === areaKey);
+    const areaQuestions = gradedQuestions.filter((question) => question.officialArea === areaKey);
     const areaScore = scoreFor(areaQuestions, testState);
     const row = document.createElement("div");
     row.className = "area-result-row";
@@ -1875,6 +1890,7 @@ function renderResult() {
 function renderApp() {
   renderInterfaceText();
   renderBottomNavigation();
+  elements.landingView.hidden = appState.view !== "landing";
   elements.dashboardView.hidden = appState.view !== "home";
   elements.quizView.hidden = appState.view !== "quiz";
   elements.resultView.hidden = appState.view !== "result";
@@ -1888,6 +1904,8 @@ function openTest(testId, showSavedResult = false) {
   if (!test?.available || !coversEveryArea(test)) return;
   appState.activeTestId = testId;
   const testState = getTestState(testId);
+  ensureExamExclusions(test, testState);
+  testState.reviewing = false;
   if (test.type === "collection") testState.collectionQuestionIds = [...test.questionIds];
   appState.view = showSavedResult ? "result" : "quiz";
   saveState();
@@ -1900,11 +1918,13 @@ function answerQuestion(index) {
   const questions = activeQuestions();
   const testState = getTestState();
   const question = questions[testState.current];
-  if (Object.prototype.hasOwnProperty.call(testState.responses, question.id)) return;
+  const test = getTestDefinition();
+  if (testState.reviewing || testState.completed) return;
+  if (test.type !== "test" && Object.prototype.hasOwnProperty.call(testState.responses, question.id)) return;
   testState.responses[question.id] = index;
-  if (index === question.correct) {
+  if (test.type !== "test" && index === question.correct) {
     appState.mistakes = appState.mistakes.filter((id) => id !== question.id);
-  } else if (!appState.mistakes.includes(question.id)) {
+  } else if (test.type !== "test" && !appState.mistakes.includes(question.id)) {
     appState.mistakes.push(question.id);
   }
   saveState();
@@ -1915,8 +1935,23 @@ function finishTest() {
   const questions = activeQuestions();
   const testState = getTestState();
   const answered = answeredFor(questions, testState);
-  testState.lastScore = scoreFor(questions, testState);
-  testState.completed = answered === questions.length;
+  if (answered < questions.length) {
+    testState.current = questions.findIndex((question) => !Object.prototype.hasOwnProperty.call(testState.responses, question.id));
+    saveState();
+    renderQuiz();
+    return;
+  }
+  const test = getTestDefinition();
+  const gradedQuestions = scoredQuestions(questions, test, testState);
+  testState.lastScore = scoreFor(gradedQuestions, testState);
+  testState.completed = true;
+  testState.reviewing = false;
+  if (test.type === "test") {
+    questions.forEach((question) => {
+      if (testState.responses[question.id] === question.correct) appState.mistakes = appState.mistakes.filter((id) => id !== question.id);
+      else if (!appState.mistakes.includes(question.id)) appState.mistakes.push(question.id);
+    });
+  }
   appState.view = "result";
   saveState();
   renderApp();
@@ -1926,6 +1961,7 @@ function finishTest() {
 function resetActiveTest() {
   if (!appState.activeTestId) return;
   appState.tests[appState.activeTestId] = blankTestState();
+  ensureExamExclusions(getTestDefinition(), appState.tests[appState.activeTestId]);
   appState.view = "quiz";
   saveState();
   renderApp();
@@ -1973,13 +2009,14 @@ elements.backHome.addEventListener("click", () => {
 });
 
 elements.resultHome.addEventListener("click", () => {
-  appState.view = "home";
+  appState.view = "landing";
   saveState();
   renderApp();
 });
 
 elements.review.addEventListener("click", () => {
   getTestState().current = 0;
+  getTestState().reviewing = true;
   appState.view = "quiz";
   saveState();
   renderApp();
@@ -1987,35 +2024,37 @@ elements.review.addEventListener("click", () => {
 
 elements.retry.addEventListener("click", resetActiveTest);
 
-elements.testsTab.addEventListener("click", () => {
-  appState.dashboardTab = "tests";
-  saveState();
-  renderApp();
-});
-
-elements.areasTab.addEventListener("click", () => {
+elements.startTraining.addEventListener("click", () => {
+  appState.view = "home";
   appState.dashboardTab = "areas";
   saveState();
   renderApp();
 });
 
-elements.reviewTab.addEventListener("click", () => {
-  appState.dashboardTab = "review";
+elements.startExams.addEventListener("click", () => {
+  appState.view = "home";
+  appState.dashboardTab = "tests";
   saveState();
   renderApp();
 });
 
 function openBottomTab(tab) {
-  appState.view = "home";
+  appState.view = tab === "home" ? "landing" : "home";
+  if (tab === "home") {
+    saveState();
+    renderApp();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
   appState.dashboardTab = tab;
   saveState();
   renderApp();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+elements.bottomHome.addEventListener("click", () => openBottomTab("home"));
 elements.bottomTests.addEventListener("click", () => openBottomTab("tests"));
 elements.bottomAreas.addEventListener("click", () => openBottomTab("areas"));
-elements.bottomMistakes.addEventListener("click", () => openBottomTab("mistakes"));
 elements.bottomSaved.addEventListener("click", () => openBottomTab("saved"));
 
 elements.language.addEventListener("change", (event) => {

@@ -8,7 +8,7 @@
     <title>Körklar | تدريب القيادة</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./assets/app-icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=23" />
+    <link rel="stylesheet" href="./styles.css?v=27" />
   </head>
   <body>
     <header class="topbar">
@@ -34,42 +34,31 @@
     </header>
 
     <main>
-      <section class="dashboard-view" id="dashboard-view">
-        <div class="dashboard-hero">
-          <div>
-            <span class="eyebrow" id="dashboard-eyebrow">خطة التدريب</span>
-            <h1 id="dashboard-title">اختبارات رخصة القيادة B</h1>
-            <p id="dashboard-description">18 اختبارًا، وكل اختبار نهائي سيضم 70 سؤالًا مختلطًا من مجالات Trafikverket الخمسة.</p>
-          </div>
-          <div class="plan-summary" aria-label="ملخص خطة الاختبارات">
-            <div><strong>18</strong><span id="tests-label">اختبارًا</span></div>
-            <div><strong>70</strong><span id="questions-label">سؤالًا لكل اختبار</span></div>
-            <div><strong>5</strong><span id="areas-label">مجالات في كل اختبار</span></div>
-          </div>
+      <section class="landing-view" id="landing-view">
+        <div class="landing-intro">
+          <span class="eyebrow" id="landing-kicker">اختر طريقة الدراسة</span>
+          <h1 id="landing-title">كيف تريد أن تبدأ؟</h1>
         </div>
+        <div class="mode-grid">
+          <button class="mode-card train" id="start-training-button" type="button">
+            <span class="mode-icon" aria-hidden="true">◎</span>
+            <strong id="training-card-title">Träna</strong>
+            <small id="training-card-note">تدرّب حسب المجال واعرف النتيجة مباشرة</small>
+          </button>
+          <button class="mode-card exam" id="start-exams-button" type="button">
+            <span class="mode-icon" aria-hidden="true">✓</span>
+            <strong id="exam-card-title">Prova</strong>
+            <small id="exam-card-note">اختبارات كاملة والنتيجة بعد التسليم</small>
+          </button>
+        </div>
+      </section>
 
-        <section class="coverage-card" aria-labelledby="coverage-title">
-          <div>
-            <span class="eyebrow" id="coverage-kicker">Träningsområde</span>
-            <h2 id="coverage-title">كل اختبار يمزج المجالات الرسمية الخمسة</h2>
-          </div>
-          <div class="area-legend" id="area-legend"></div>
-        </section>
-
-        <nav class="dashboard-switch" aria-label="طريقة التدريب">
-          <button class="active" id="tests-tab-button" type="button">Prov 1–18</button>
-          <button id="areas-tab-button" type="button">Träna per område</button>
-          <button id="review-tab-button" type="button">المراجعة (7)</button>
-        </nav>
-
-        <p class="batch-status" id="batch-status" hidden></p>
-
+      <section class="dashboard-view" id="dashboard-view">
         <div class="section-heading">
           <div>
-            <span class="eyebrow" id="tests-kicker">اختر الاختبار</span>
-            <h2 id="tests-title">Prov 1–18</h2>
+
+            <h1 id="tests-title">الاختبارات</h1>
           </div>
-          <p id="sample-note">Prov 1 متاح الآن كمعاينة من 5 أسئلة، سؤال واحد من كل مجال. تُضاف أسئلة الاختبارات الكاملة لاحقًا.</p>
         </div>
         <section class="test-grid" id="test-grid" aria-live="polite"></section>
       </section>
@@ -147,28 +136,28 @@
     </main>
 
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="التنقل الرئيسي">
-      <button class="active" id="bottom-tests-button" type="button" data-tab="tests">
-        <span aria-hidden="true">▦</span><strong id="bottom-tests-label">الاختبارات</strong>
+      <button class="active" id="bottom-home-button" type="button" data-tab="home">
+        <span aria-hidden="true">⌂</span><strong id="bottom-home-label">الرئيسية</strong>
       </button>
       <button id="bottom-areas-button" type="button" data-tab="areas">
-        <span aria-hidden="true">◫</span><strong id="bottom-areas-label">المجالات</strong>
+        <span aria-hidden="true">◎</span><strong id="bottom-areas-label">التدريب</strong>
       </button>
-      <button id="bottom-mistakes-button" type="button" data-tab="mistakes">
-        <span aria-hidden="true">↻</span><strong id="bottom-mistakes-label">الأخطاء</strong><em id="bottom-mistakes-count">0</em>
+      <button id="bottom-tests-button" type="button" data-tab="tests">
+        <span aria-hidden="true">▦</span><strong id="bottom-tests-label">الاختبارات</strong>
       </button>
       <button id="bottom-saved-button" type="button" data-tab="saved">
         <span aria-hidden="true">★</span><strong id="bottom-saved-label">المحفوظة</strong><em id="bottom-saved-count">0</em>
       </button>
     </nav>
 
-    <script src="./data/batch1-raw.js?v=23"></script>
-    <script src="./data/batch1-ar.js?v=23"></script>
-    <script src="./data/batch1-review-ar.js?v=23"></script>
-    <script src="./data/remaining-enriched.js?v=23"></script>
-    <script src="./data/resolved-review.js?v=23"></script>
-    <script src="./data/prov1-gpt-ar.js?v=23"></script>
-    <script src="./data/prov2-gpt-ar.js?v=23"></script>
-    <script src="./data/rules100-gpt-ar.js?v=23"></script>
-    <script src="./app.js?v=23"></script>
+    <script src="./data/batch1-raw.js?v=27"></script>
+    <script src="./data/batch1-ar.js?v=27"></script>
+    <script src="./data/batch1-review-ar.js?v=27"></script>
+    <script src="./data/remaining-enriched.js?v=27"></script>
+    <script src="./data/resolved-review.js?v=27"></script>
+    <script src="./data/prov1-gpt-ar.js?v=27"></script>
+    <script src="./data/prov2-gpt-ar.js?v=27"></script>
+    <script src="./data/rules100-gpt-ar.js?v=27"></script>
+    <script src="./app.js?v=27"></script>
   </body>
 </html>
