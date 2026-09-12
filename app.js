@@ -676,7 +676,23 @@ function deduplicateQuestions(questions) {
   return [...bestBySignature.values()].sort((left, right) => numericIdValue(left.id) - numericIdValue(right.id));
 }
 
-const allQuestions = deduplicateQuestions(assembledQuestions);
+const correctedAreaIds = {
+  rules: ["q101", "q167", "q443", "q542", "q639", "q713", "q871", "q945", "q982", "q1026", "q1029", "q1047"],
+  vehicle: ["q447", "q634", "q686", "q694", "q741", "q769", "q776", "q798", "q970", "q1194", "q1239"],
+  safety: ["q122", "q185", "q215", "q240", "q247", "q438", "q439", "q459", "q486", "q505", "q533", "q536", "q579", "q1022", "q1154", "q1172"],
+  environment: ["q435"],
+  personal: ["q117", "q126", "q136", "q160", "q169", "q510", "q553"]
+};
+const childRestraintQuestionIds = new Set(["q473", "q576", "q598", "q887", "q941"]);
+const correctedAreaById = new Map(Object.entries(correctedAreaIds)
+  .flatMap(([areaKey, ids]) => ids.map((id) => [id, areaKey])));
+childRestraintQuestionIds.forEach((id) => correctedAreaById.set(id, "rules"));
+const allQuestions = deduplicateQuestions(assembledQuestions).map((question) => {
+  const correctedArea = correctedAreaById.get(question.id);
+  return correctedArea && question.officialArea !== correctedArea
+    ? { ...question, officialArea: correctedArea }
+    : question;
+});
 
 const officialAreas = {
   vehicle: { ar: "معرفة المركبة والتحكم بها", sv: "Fordonskännedom och manövrering" },
@@ -695,9 +711,9 @@ const trainingTopicCatalog = {
     { id: "loads-trailers", sv: "Last, vikt och släp", ar: "الحمولة والأوزان والمقطورات", icon: "⚖", match: /släp|släpvagn|last|lastning|lastsäkr|kultryck|axeltryck|boggitryck|bruttovikt|tjänstevikt|totalvikt|maximilast|dragkrok|kopplingsanordning/ },
     { id: "tyres-grip", sv: "Däck och väggrepp", ar: "الإطارات والتماسك", icon: "◉", match: /däck|dubbdäck|vinterdäck|mönsterdjup|lufttryck|friktion|snökedj|reservhjul|punktering|nödhjul/ },
     { id: "brakes-driving", sv: "Bromsar och manövrering", ar: "الفرامل والتحكم بالمركبة", icon: "◫", match: /broms|abs|sladd|styrning|styrservo|koppling|växel|motorbroms|parkeringsbroms|färdbroms|start i backe/ },
-    { id: "lighting-visibility", sv: "Belysning och sikt", ar: "الإضاءة والرؤية", icon: "☀", match: /belysning|helljus|halvljus|dimljus|bakljus|lykta|strålkast|reflex|vindruta|vindrutetork|spolarvätska/ },
+    { id: "lighting-visibility", sv: "Belysning och sikt", ar: "الإضاءة والرؤية", icon: "☀", match: /belysning|helljus|halvljus|dimljus|bakljus|parkeringsljus|lykta|strålkast|reflex|vindruta|vindrutetork|spolarvätska/ },
     { id: "safety-systems", sv: "Bälte och säkerhetssystem", ar: "حزام الأمان وأنظمة الحماية", icon: "✚", match: /säkerhetsbälte|bilbälte|bältet|airbag|krockkudde|nackskydd|krocksäker/ },
-    { id: "maintenance-inspection", sv: "Underhåll och kontroll", ar: "الصيانة وفحص المركبة", icon: "⌁", match: /besikt|service|motorolja|oljenivå|batteri|kylvätska|kylsystem|avgassystem|varningslampa|instrumentpanel|katalysator/ },
+    { id: "maintenance-inspection", sv: "Underhåll och kontroll", ar: "الصيانة وفحص المركبة", icon: "⌁", match: /besikt|service|motorolja|oljenivå|batteri|kylvätska|kylsystem|avgassystem|varningslampa|instrumentpanel|katalysator|framhjul|obalanser|hjulbalans/ },
     { id: "vehicle-basics", sv: "Fordon och teknik", ar: "المركبات والتقنيات الأساسية", icon: "🚗", match: /fordon|personbil|lastbil|motorcykel|moped|fyrhjulsdrift|framhjulsdrift|bakhjulsdrift|registreringsbevis|trafikförsäkring/ },
     { id: "other", sv: "Övrig fordonskunskap", ar: "معارف أخرى عن المركبة", icon: "＋" }
   ],
@@ -706,7 +722,7 @@ const trainingTopicCatalog = {
     { id: "fuel-energy", sv: "Bränslen och energi", ar: "الوقود والطاقة", icon: "⛽", match: /bränsle|bensin|diesel|etanol|biobränsle|biodrivmedel|elbil|förnybar|fossil/ },
     { id: "eco-driving", sv: "Miljövänlig körning", ar: "القيادة الاقتصادية والصديقة للبيئة", icon: "↗", match: /bränsleförbruk|kallstart|motorvärmare|växla|tomgång|eco|miljövän|sparsam|körsätt|arbetstemperatur/ },
     { id: "noise-nature", sv: "Buller och natur", ar: "الضوضاء والطبيعة", icon: "♧", match: /buller|ljudnivå|natur|terrängkör|miljözon|djur/ },
-    { id: "transport-choice", sv: "Resor och fordonsval", ar: "اختيار وسيلة النقل والمركبة", icon: "♻", match: /samåk|kollektiv|transport|fordonsval|återvinn|skrota|biltvätt|tvätta|färdmedel|trafikmiljö|begagnad bil/ },
+    { id: "transport-choice", sv: "Resor, bilvård och fordonsval", ar: "اختيار النقل والعناية بالمركبة", icon: "♻", match: /samåk|kollektiv|transport|fordonsval|återvinn|skrota|biltvätt|tvätta|färdmedel|trafikmiljö|begagnad bil/ },
     { id: "other", sv: "Övrigt om miljö", ar: "موضوعات بيئية أخرى", icon: "＋" }
   ],
   safety: [
@@ -718,18 +734,19 @@ const trainingTopicCatalog = {
     { id: "other", sv: "Övrig trafiksäkerhet", ar: "موضوعات أخرى في السلامة المرورية", icon: "＋" }
   ],
   rules: [
-    { id: "children-passengers", sv: "Barn, bilbarnstol och passagerare", ar: "الأطفال ومقاعدهم والركاب", icon: "♟", match: /bilbarnstol|babyskydd|bälteskudde|barn.*bälte|barn.*placera|barn.*sitta|transportera.*barn|skolskjuts|passagerare|säkerhetsbälte/ },
-    { id: "parking-stopping", sv: "Stannande och parkering", ar: "التوقف وركن السيارة", icon: "P", match: /parkering|parkera|parkerat|parkerings|stoppförbud|förbud att stanna|p-skiva|datumparkering|lastplats|stanna vid vägkanten|tänkt stanna/ },
-    { id: "signs-plates", sv: "Vägmärken och tilläggstavlor", ar: "إشارات المرور واللوحات الإضافية", icon: "△", match: /vägmärk|märke|skylt|tilläggstavl|vägvis|lokaliseringsmärke|anvisningsmärke|varningsmärke|förbudsmärke|påbudsmärke/ },
-    { id: "priority-intersections", sv: "Väjningsregler och korsningar", ar: "قواعد الأولوية والتقاطعات", icon: "◇", match: /väjningsplikt|högerregel|utfartsregel|huvudled|stopplikt|företräde|korsning|cirkulationsplats|rondell/ },
+    { id: "children-passengers", sv: "Barn och bilbarnstolar", ar: "الأطفال ومقاعد السيارة", icon: "♟", match: /barn|bilbarnstol|babyskydd|bälteskudde|barn.*bälte/ },
+    { id: "passenger-seats", sv: "Passagerare och sittplatser", ar: "الركاب والمقاعد", icon: "♙", match: /passagerarplatser|passagerare din bil|passagerare får samtidigt|passagerare får färdas/ },
+    { id: "parking-stopping", sv: "Stannande och parkering", ar: "التوقف وركن السيارة", icon: "P", match: /parkering\b|parkera|parkerat|parkerings(?!ljus|broms)|stoppförbud|förbud att stanna|p-skiva|datumparkering|lastplats|stanna vid vägkanten|tänkt stanna/ },
+    { id: "signs-plates", sv: "Vägmärken och tilläggstavlor", ar: "إشارات المرور واللوحات الإضافية", icon: "△", match: /vägmärk|märkeskombination|\bmärke(?:t|n|na)?\b|skylt|tilläggstavl|vägvis|lokaliseringsmärke|anvisningsmärke|varningsmärke|förbudsmärke|påbudsmärke/ },
+    { id: "priority-intersections", sv: "Väjningsregler och korsningar", ar: "قواعد الأولوية والتقاطعات", icon: "◇", match: /väjningsplikt|högerregel|utfartsregel|huvudled|stopplikt|företräde|korsning|cirkulationsplats|rondell|köra ut på en väg från en parkeringsplats/ },
     { id: "speed-roads", sv: "Hastighet och olika vägar", ar: "السرعة وأنواع الطرق", icon: "70", match: /hastighet|km\/h|motorväg|motortrafikled|tättbebyggt|landsväg|bashastighet/ },
     { id: "position-turning", sv: "Placering, körfält och sväng", ar: "التموضع والمسارات والانعطاف", icon: "↱", match: /körfält|placering|sväng|vända|u-sväng|backning|backa|körriktning|filbyte|ge tecken/ },
     { id: "overtaking-meeting", sv: "Omkörning och möte", ar: "التجاوز والتقابل", icon: "⇄", match: /kör om|omkör|mötande|mötesplats|möte med/ },
     { id: "road-users", sv: "Gående, cykel, moped och buss", ar: "المشاة والدراجات والموبيد والحافلات", icon: "♙", match: /gående|fotgäng|cykel|cyklist|moped|motorcyk|övergångsställe|cykelöverfart|buss|häst|ryttare/ },
     { id: "railway", sv: "Järnväg och spårtrafik", ar: "السكك الحديدية والترام", icon: "╫", match: /järnväg|plankorsning|spårvagn|spårområde|tåg/ },
-    { id: "licence-duties", sv: "Körkort och förarens skyldigheter", ar: "رخصة القيادة وواجبات السائق", icon: "▣", match: /körkort|behörighet|övningskör|handledare|polis|skyldighet|trafikolycka|utryckningsfordon|blåljus|trafikförsäkring/ },
+    { id: "licence-duties", sv: "Körkort och förarens skyldigheter", ar: "رخصة القيادة وواجبات السائق", icon: "▣", match: /körkort|behörighet|övningskör|handledare|polis|skyldighet|skyldig|ägarbyte|trafikolycka|utryckningsfordon|blåljus|trafikförsäkring/ },
     { id: "road-markings-signals", sv: "Vägmarkeringar och trafiksignaler", ar: "علامات سطح الطريق والإشارات الضوئية", icon: "═", match: /vägmarkering|mittmarkering|markeringar av vägens mitt|mittlinje|heldragna? linje|linjen i vägens mitt|trafiksignal|gult ljus|vägtransportledare|vägarbete|lokala trafikföreskrift|när får du köra|vilket eller vilka håll|fortsätta rakt fram/ },
-    { id: "vehicle-load-rules", sv: "Fordonskrav, last och registrering", ar: "متطلبات المركبة والحمولة والتسجيل", icon: "▤", match: /krockkudd|färdbroms|abs-broms|kylsystem|bromsvätska|bromskrets|säkring|motortemperatur|utskjutande last|korrekt lastat|ägarbyte|passagerarplatser|fri höjd|dimljus|motorbroms|högtryckstvätt|tvättning av bilen/ },
+    { id: "vehicle-load-rules", sv: "Fordonskrav, last och registrering", ar: "متطلبات المركبة والحمولة والتسجيل", icon: "▤", match: /krockkudd|färdbroms|abs-broms|kylsystem|bromsvätska|bromskrets|säkring|motortemperatur|utskjutande last|korrekt lastat|ägarbyte|fri höjd|dimljus|motorbroms|högtryckstvätt|tvättning av bilen|hur mycket bagage.*lasta|lastad med/ },
     { id: "safe-driving-rules", sv: "Säker körning och risker", ar: "القيادة الآمنة والمخاطر", icon: "◈", match: /fästa blicken|personlig mognad|egenskaper hos en förare|defensiv körning|väggrepp|halkrisk|vinterväglag|vattenplaning|säkert genom en kurva|direktseende|periferiseende|unga män|omkommer|informationen.*synen|förares syn|säker undanmanöver|plötsligt stannat|största risken/ },
     { id: "other", sv: "Övriga trafikregler", ar: "قواعد مرور أخرى", icon: "＋" }
   ],
@@ -744,13 +761,28 @@ const trainingTopicCatalog = {
 };
 
 function topicSearchText(question) {
-  return [question.topicSv, question.text, ...(question.answers || [])].join(" ").toLocaleLowerCase("sv-SE");
+  const label = String(question.topicSv || "");
+  const genericLabels = new Set(["Manuell granskning", ...Object.values(officialAreas).map((area) => area.sv)]);
+  return [question.text, genericLabels.has(label) ? "" : label].join(" ").toLocaleLowerCase("sv-SE");
 }
 
 function trainingTopicForQuestion(question) {
   const catalog = trainingTopicCatalog[question.officialArea] || [];
+  if (["q598", "q941"].includes(question.id)) return catalog.find((topic) => topic.id === "children-passengers");
+  if (question.id === "q1018") return catalog.find((topic) => topic.id === "priority-intersections");
+  if (question.officialArea === "rules" && /vägmärk|\bmärke(?:t|n|na)?\b|skylt|tilläggstavl/i.test(question.text)) {
+    const parkingOptions = question.answers.filter((answer) => /parkera|parkering|parkerings(?!ljus|broms)/i.test(answer));
+    if (parkingOptions.length >= Math.ceil(question.answers.length / 2)) {
+      return catalog.find((topic) => topic.id === "parking-stopping");
+    }
+  }
   const searchable = topicSearchText(question);
-  return catalog.find((topic) => topic.match?.test(searchable)) || catalog.find((topic) => topic.id === "other");
+  const explicitTopic = catalog.find((topic) => topic.match?.test(searchable));
+  if (explicitTopic) return explicitTopic;
+  const threshold = Math.max(2, Math.ceil(question.answers.length * 0.6));
+  const answerTopic = catalog.find((topic) => topic.match
+    && question.answers.filter((answer) => topic.match.test(answer.toLocaleLowerCase("sv-SE"))).length >= threshold);
+  return answerTopic || catalog.find((topic) => topic.id === "other");
 }
 
 function topicLabel(areaKey, topicKey) {
@@ -1239,7 +1271,7 @@ const interfaceText = {
 };
 
 const STORAGE_KEY = "korklar-tests-v7";
-const QUESTION_SET_VERSION = 30;
+const QUESTION_SET_VERSION = 32;
 let currentLanguage = localStorage.getItem("korklar-language") || "ar";
 if (!interfaceText[currentLanguage]) currentLanguage = "ar";
 
@@ -1463,7 +1495,7 @@ function saveState() {
 function restoreState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem("korklar-tests-v6"));
-    if (!saved || typeof saved.tests !== "object" || Array.isArray(saved.tests)) return;
+    if (!saved || !saved.tests || typeof saved.tests !== "object" || Array.isArray(saved.tests)) return;
     const legacyBookmarks = Object.values(saved.tests).flatMap((testState) =>
       Array.isArray(testState?.bookmarks) ? testState.bookmarks : []
     );
@@ -1475,7 +1507,11 @@ function restoreState() {
     appState.bookmarks = normalizedCollectionIds(saved.bookmarks || legacyBookmarks);
     appState.mistakes = normalizedCollectionIds(saved.mistakes || legacyMistakes);
     const sameQuestionSet = saved.questionSetVersion === QUESTION_SET_VERSION;
-    appState.tests = sameQuestionSet ? saved.tests : {};
+    appState.tests = sameQuestionSet
+      ? saved.tests
+      : Object.fromEntries(Object.entries(saved.tests)
+        .filter(([id]) => id.startsWith("topic-"))
+        .map(([id, state]) => [id, { ...state, current: 0, completed: false, reviewing: false }]));
     if (["areas", "saved"].includes(saved.dashboardTab)) appState.dashboardTab = saved.dashboardTab;
     if (areaOrder.includes(saved.selectedAreaKey)) appState.selectedAreaKey = saved.selectedAreaKey;
     if (saved.dashboardTab === "mistakes") appState.dashboardTab = "areas";
