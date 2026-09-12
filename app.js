@@ -690,6 +690,77 @@ const areaOrder = ["vehicle", "environment", "safety", "rules", "personal"];
 const trainingQuestionIds = allQuestions.map((question) => question.id);
 const questionById = new Map(allQuestions.map((question) => [question.id, question]));
 
+const trainingTopicCatalog = {
+  vehicle: [
+    { id: "loads-trailers", sv: "Last, vikt och släp", ar: "الحمولة والأوزان والمقطورات", icon: "⚖", match: /släp|släpvagn|last|lastning|lastsäkr|kultryck|axeltryck|boggitryck|bruttovikt|tjänstevikt|totalvikt|maximilast|dragkrok|kopplingsanordning/ },
+    { id: "tyres-grip", sv: "Däck och väggrepp", ar: "الإطارات والتماسك", icon: "◉", match: /däck|dubbdäck|vinterdäck|mönsterdjup|lufttryck|friktion|snökedj|reservhjul|punktering|nödhjul/ },
+    { id: "brakes-driving", sv: "Bromsar och manövrering", ar: "الفرامل والتحكم بالمركبة", icon: "◫", match: /broms|abs|sladd|styrning|styrservo|koppling|växel|motorbroms|parkeringsbroms|färdbroms|start i backe/ },
+    { id: "lighting-visibility", sv: "Belysning och sikt", ar: "الإضاءة والرؤية", icon: "☀", match: /belysning|helljus|halvljus|dimljus|bakljus|lykta|strålkast|reflex|vindruta|vindrutetork|spolarvätska/ },
+    { id: "safety-systems", sv: "Bälte och säkerhetssystem", ar: "حزام الأمان وأنظمة الحماية", icon: "✚", match: /säkerhetsbälte|bilbälte|bältet|airbag|krockkudde|nackskydd|krocksäker/ },
+    { id: "maintenance-inspection", sv: "Underhåll och kontroll", ar: "الصيانة وفحص المركبة", icon: "⌁", match: /besikt|service|motorolja|oljenivå|batteri|kylvätska|kylsystem|avgassystem|varningslampa|instrumentpanel|katalysator/ },
+    { id: "vehicle-basics", sv: "Fordon och teknik", ar: "المركبات والتقنيات الأساسية", icon: "🚗", match: /fordon|personbil|lastbil|motorcykel|moped|fyrhjulsdrift|framhjulsdrift|bakhjulsdrift|registreringsbevis|trafikförsäkring/ },
+    { id: "other", sv: "Övrig fordonskunskap", ar: "معارف أخرى عن المركبة", icon: "＋" }
+  ],
+  environment: [
+    { id: "emissions-climate", sv: "Avgaser och klimat", ar: "العوادم والمناخ", icon: "☁", match: /avgas|utsläpp|koldioxid|koloxid|kväveoxid|kolväte|växthuseffekt|ozon|försurning|luftförorening|partiklar|bensen/ },
+    { id: "fuel-energy", sv: "Bränslen och energi", ar: "الوقود والطاقة", icon: "⛽", match: /bränsle|bensin|diesel|etanol|biobränsle|biodrivmedel|elbil|förnybar|fossil/ },
+    { id: "eco-driving", sv: "Miljövänlig körning", ar: "القيادة الاقتصادية والصديقة للبيئة", icon: "↗", match: /bränsleförbruk|kallstart|motorvärmare|växla|tomgång|eco|miljövän|sparsam|körsätt|arbetstemperatur/ },
+    { id: "noise-nature", sv: "Buller och natur", ar: "الضوضاء والطبيعة", icon: "♧", match: /buller|ljudnivå|natur|terrängkör|miljözon|djur/ },
+    { id: "transport-choice", sv: "Resor och fordonsval", ar: "اختيار وسيلة النقل والمركبة", icon: "♻", match: /samåk|kollektiv|transport|fordonsval|återvinn|skrota|biltvätt|tvätta|färdmedel|trafikmiljö|begagnad bil/ },
+    { id: "other", sv: "Övrigt om miljö", ar: "موضوعات بيئية أخرى", icon: "＋" }
+  ],
+  safety: [
+    { id: "speed-distance", sv: "Hastighet och säkerhetsmarginaler", ar: "السرعة ومسافات الأمان", icon: "↔", match: /hastighet|fart|km\/h|bromssträcka|reaktionssträcka|stoppsträcka|avstånd|tresekund|säkerhetsmarginal/ },
+    { id: "road-conditions", sv: "Väder, mörker och väglag", ar: "الطقس والظلام وحالة الطريق", icon: "☂", match: /mörker|dimma|halka|väglag|regn|snö|isigt|bländ|sikt|vinter|motljus/ },
+    { id: "risk-awareness", sv: "Riskmedveten och defensiv körning", ar: "إدراك المخاطر والقيادة الدفاعية", icon: "◈", match: /defensiv|risk|uppmärksam|blick|avsök|handlingsbered|fara|överrask|grundregel|påkörning|vägren|svänga/ },
+    { id: "vulnerable-road-users", sv: "Oskyddade trafikanter", ar: "مستخدمو الطريق غير المحميين", icon: "♙", match: /barn|gående|fotgäng|cykel|cyklist|moped|motorcyk|övergångsställe|cykelöverfart|skol|häst|ryttare/ },
+    { id: "accidents-first-aid", sv: "Olyckor och första hjälpen", ar: "الحوادث والإسعافات الأولية", icon: "✚", match: /olyck|skadas svårt|första hjälpen|skadad|blöd|chock|brand|larm|112|vilt|älg|djur|försäkring|diket|samåk/ },
+    { id: "other", sv: "Övrig trafiksäkerhet", ar: "موضوعات أخرى في السلامة المرورية", icon: "＋" }
+  ],
+  rules: [
+    { id: "children-passengers", sv: "Barn, bilbarnstol och passagerare", ar: "الأطفال ومقاعدهم والركاب", icon: "♟", match: /bilbarnstol|babyskydd|bälteskudde|barn.*bälte|barn.*placera|barn.*sitta|transportera.*barn|skolskjuts|passagerare|säkerhetsbälte/ },
+    { id: "parking-stopping", sv: "Stannande och parkering", ar: "التوقف وركن السيارة", icon: "P", match: /parkering|parkera|parkerat|parkerings|stoppförbud|förbud att stanna|p-skiva|datumparkering|lastplats|stanna vid vägkanten|tänkt stanna/ },
+    { id: "signs-plates", sv: "Vägmärken och tilläggstavlor", ar: "إشارات المرور واللوحات الإضافية", icon: "△", match: /vägmärk|märke|skylt|tilläggstavl|vägvis|lokaliseringsmärke|anvisningsmärke|varningsmärke|förbudsmärke|påbudsmärke/ },
+    { id: "priority-intersections", sv: "Väjningsregler och korsningar", ar: "قواعد الأولوية والتقاطعات", icon: "◇", match: /väjningsplikt|högerregel|utfartsregel|huvudled|stopplikt|företräde|korsning|cirkulationsplats|rondell/ },
+    { id: "speed-roads", sv: "Hastighet och olika vägar", ar: "السرعة وأنواع الطرق", icon: "70", match: /hastighet|km\/h|motorväg|motortrafikled|tättbebyggt|landsväg|bashastighet/ },
+    { id: "position-turning", sv: "Placering, körfält och sväng", ar: "التموضع والمسارات والانعطاف", icon: "↱", match: /körfält|placering|sväng|vända|u-sväng|backning|backa|körriktning|filbyte|ge tecken/ },
+    { id: "overtaking-meeting", sv: "Omkörning och möte", ar: "التجاوز والتقابل", icon: "⇄", match: /kör om|omkör|mötande|mötesplats|möte med/ },
+    { id: "road-users", sv: "Gående, cykel, moped och buss", ar: "المشاة والدراجات والموبيد والحافلات", icon: "♙", match: /gående|fotgäng|cykel|cyklist|moped|motorcyk|övergångsställe|cykelöverfart|buss|häst|ryttare/ },
+    { id: "railway", sv: "Järnväg och spårtrafik", ar: "السكك الحديدية والترام", icon: "╫", match: /järnväg|plankorsning|spårvagn|spårområde|tåg/ },
+    { id: "licence-duties", sv: "Körkort och förarens skyldigheter", ar: "رخصة القيادة وواجبات السائق", icon: "▣", match: /körkort|behörighet|övningskör|handledare|polis|skyldighet|trafikolycka|utryckningsfordon|blåljus|trafikförsäkring/ },
+    { id: "road-markings-signals", sv: "Vägmarkeringar och trafiksignaler", ar: "علامات سطح الطريق والإشارات الضوئية", icon: "═", match: /vägmarkering|mittmarkering|markeringar av vägens mitt|mittlinje|heldragna? linje|linjen i vägens mitt|trafiksignal|gult ljus|vägtransportledare|vägarbete|lokala trafikföreskrift|när får du köra|vilket eller vilka håll|fortsätta rakt fram/ },
+    { id: "vehicle-load-rules", sv: "Fordonskrav, last och registrering", ar: "متطلبات المركبة والحمولة والتسجيل", icon: "▤", match: /krockkudd|färdbroms|abs-broms|kylsystem|bromsvätska|bromskrets|säkring|motortemperatur|utskjutande last|korrekt lastat|ägarbyte|passagerarplatser|fri höjd|dimljus|motorbroms|högtryckstvätt|tvättning av bilen/ },
+    { id: "safe-driving-rules", sv: "Säker körning och risker", ar: "القيادة الآمنة والمخاطر", icon: "◈", match: /fästa blicken|personlig mognad|egenskaper hos en förare|defensiv körning|väggrepp|halkrisk|vinterväglag|vattenplaning|säkert genom en kurva|direktseende|periferiseende|unga män|omkommer|informationen.*synen|förares syn|säker undanmanöver|plötsligt stannat|största risken/ },
+    { id: "other", sv: "Övriga trafikregler", ar: "قواعد مرور أخرى", icon: "＋" }
+  ],
+  personal: [
+    { id: "alcohol-drugs", sv: "Alkohol, droger och läkemedel", ar: "الكحول والمخدرات والأدوية", icon: "!", match: /alkohol|rattfyll|promille|droger|narkotika|läkemedel|medicin/ },
+    { id: "fatigue-stress", sv: "Trötthet, stress och distraktion", ar: "التعب والتوتر والتشتت", icon: "☾", match: /trött|sömn|stress|distraktion|mobiltelefon|mobilen|uppmärksamhet/ },
+    { id: "perception-reaction", sv: "Syn, hörsel och reaktion", ar: "النظر والسمع ورد الفعل", icon: "◎", match: /syn|seende|hörsel|reaktion|mörkerseende|perifer|mötespunkt|fartblind/ },
+    { id: "learning-experience", sv: "Inlärning, erfarenhet och ålder", ar: "التعلّم والخبرة والعمر", icon: "◇", match: /inlärning|erfaren|övning|äldre|unga förare|nybliven|körvana|utbildning/ },
+    { id: "attitudes-behaviour", sv: "Attityder och beteende", ar: "السلوك والمواقف أثناء القيادة", icon: "◌", match: /impulsiv|aggressiv|grupptryck|självkännedom|överskatt|underskatt|attityd|beteende|riskbenägen|manliga|kvinnliga|trafiksäkerhet/ },
+    { id: "other", sv: "Övriga personliga förutsättningar", ar: "ظروف شخصية أخرى", icon: "＋" }
+  ]
+};
+
+function topicSearchText(question) {
+  return [question.topicSv, question.text, ...(question.answers || [])].join(" ").toLocaleLowerCase("sv-SE");
+}
+
+function trainingTopicForQuestion(question) {
+  const catalog = trainingTopicCatalog[question.officialArea] || [];
+  const searchable = topicSearchText(question);
+  return catalog.find((topic) => topic.match?.test(searchable)) || catalog.find((topic) => topic.id === "other");
+}
+
+function topicLabel(areaKey, topicKey) {
+  const topic = trainingTopicCatalog[areaKey]?.find((item) => item.id === topicKey);
+  if (!topic) return "";
+  if (currentLanguage === "ar") return topic.ar;
+  if (currentLanguage === "sv") return topic.sv;
+  return `${topic.ar} · ${topic.sv}`;
+}
+
 function numericQuestionId(id) {
   return Number(id.replace(/\D/g, "")) || 0;
 }
@@ -769,7 +840,24 @@ const trainingDefinitions = areaOrder.map((areaKey) => ({
   questionIds: trainingQuestionIds.filter((id) => questionById.get(id)?.officialArea === areaKey)
 }));
 
-const activityDefinitions = [...testDefinitions, ...trainingDefinitions];
+const topicDefinitions = areaOrder.flatMap((areaKey) => trainingTopicCatalog[areaKey]
+  .map((topic) => ({
+    id: `topic-${areaKey}-${topic.id}`,
+    type: "topic",
+    areaKey,
+    topicKey: topic.id,
+    icon: topic.icon,
+    available: true,
+    preview: true,
+    requiredAreas: [areaKey],
+    questionIds: trainingQuestionIds.filter((id) => {
+      const question = questionById.get(id);
+      return question?.officialArea === areaKey && trainingTopicForQuestion(question)?.id === topic.id;
+    })
+  }))
+  .filter((topic) => topic.questionIds.length));
+
+const activityDefinitions = [...testDefinitions, ...trainingDefinitions, ...topicDefinitions];
 
 function questionsForTest(test) {
   return test.questionIds.map((id) => questionById.get(id)).filter(Boolean);
@@ -833,6 +921,13 @@ const interfaceText = {
     areaPractice: "تدريب حسب المجال",
     areaQuestions: (count) => count === 1 ? "سؤال واحد متاح الآن" : `${count} أسئلة متاحة الآن`,
     startArea: "ابدأ التدريب",
+    chooseTopics: "اختر موضوعًا",
+    topicPractice: "تدريب حسب الموضوع",
+    topicQuestions: (count) => `${count} أسئلة في هذا الموضوع`,
+    startTopic: "ابدأ الموضوع",
+    backToAreas: "← المجالات",
+    backToTopics: "← موضوعات المجال",
+    topicSize: "أسئلة الموضوع",
     preview: "70 سؤالًا",
     coming: "قريبًا",
     allFive: "جميع المجالات الخمسة",
@@ -947,6 +1042,13 @@ const interfaceText = {
     areaPractice: "Träning per område",
     areaQuestions: (count) => `${count} frågor tillgängliga nu`,
     startArea: "Starta träningen",
+    chooseTopics: "Välj ett ämne",
+    topicPractice: "Träning per ämne",
+    topicQuestions: (count) => `${count} frågor i ämnet`,
+    startTopic: "Starta ämnet",
+    backToAreas: "← Områden",
+    backToTopics: "← Ämnen i området",
+    topicSize: "Frågor i ämnet",
     preview: "70 frågor",
     coming: "Kommer snart",
     allFive: "Alla fem områden",
@@ -1061,6 +1163,13 @@ const interfaceText = {
     areaPractice: "حسب المجال · Per område",
     areaQuestions: (count) => `${count} أسئلة · frågor`,
     startArea: "ابدأ التدريب · Starta",
+    chooseTopics: "اختر موضوعًا · Välj ett ämne",
+    topicPractice: "تدريب حسب الموضوع · Träning per ämne",
+    topicQuestions: (count) => `${count} أسئلة · frågor i ämnet`,
+    startTopic: "ابدأ · Starta ämnet",
+    backToAreas: "← المجالات · Områden",
+    backToTopics: "← موضوعات المجال · Ämnen",
+    topicSize: "أسئلة الموضوع · Ämnesfrågor",
     preview: "70 سؤالًا · frågor",
     coming: "قريبًا · Kommer snart",
     allFive: "المجالات الخمسة · Alla fem områden",
@@ -1137,6 +1246,7 @@ if (!interfaceText[currentLanguage]) currentLanguage = "ar";
 const appState = {
   view: "landing",
   dashboardTab: "tests",
+  selectedAreaKey: null,
   activeTestId: null,
   tests: {},
   mistakes: [],
@@ -1161,6 +1271,7 @@ const elements = {
   quizView: document.querySelector("#quiz-view"),
   resultView: document.querySelector("#result-view"),
   testsTitle: document.querySelector("#tests-title"),
+  backToAreas: document.querySelector("#back-to-areas-button"),
   testGrid: document.querySelector("#test-grid"),
   backHome: document.querySelector("#back-home-button"),
   progressTitle: document.querySelector("#progress-title"),
@@ -1341,6 +1452,7 @@ function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     questionSetVersion: QUESTION_SET_VERSION,
     dashboardTab: appState.dashboardTab,
+    selectedAreaKey: appState.selectedAreaKey,
     activeTestId: appState.activeTestId,
     tests: appState.tests,
     mistakes: normalizedCollectionIds(appState.mistakes),
@@ -1365,6 +1477,7 @@ function restoreState() {
     const sameQuestionSet = saved.questionSetVersion === QUESTION_SET_VERSION;
     appState.tests = sameQuestionSet ? saved.tests : {};
     if (["areas", "saved"].includes(saved.dashboardTab)) appState.dashboardTab = saved.dashboardTab;
+    if (areaOrder.includes(saved.selectedAreaKey)) appState.selectedAreaKey = saved.selectedAreaKey;
     if (saved.dashboardTab === "mistakes") appState.dashboardTab = "areas";
     if (sameQuestionSet && getTestDefinition(saved.activeTestId)) appState.activeTestId = saved.activeTestId;
   } catch (_) {
@@ -1414,7 +1527,7 @@ function activeBottomTab() {
       : "tests";
   }
   const activeTest = getTestDefinition();
-  if (activeTest?.type === "area") return "areas";
+  if (["area", "topic"].includes(activeTest?.type)) return "areas";
   if (activeTest?.collectionKey === "mistakes") return "areas";
   if (activeTest?.collectionKey === "bookmarks") return "saved";
   return "tests";
@@ -1451,6 +1564,7 @@ function renderDashboard() {
 
   elements.testGrid.replaceChildren();
   const showingAreas = appState.dashboardTab === "areas";
+  const showingTopics = showingAreas && areaOrder.includes(appState.selectedAreaKey);
   const showingReview = appState.dashboardTab === "review";
   const showingMistakes = false;
   const showingSaved = appState.dashboardTab === "saved";
@@ -1465,7 +1579,15 @@ function renderDashboard() {
     : showingAreas
       ? ["areasKicker", "areasTitle", "areasNote"]
       : ["testsKicker", "testsTitle", "sampleNote"];
-  elements.testsTitle.textContent = showingAreas ? textFor("areasTab") : showingTests ? textFor("bottomTests") : textFor(headingKeys[1]);
+  elements.testsTitle.textContent = showingTopics
+    ? areaLabel(appState.selectedAreaKey)
+    : showingAreas
+      ? textFor("areasTab")
+      : showingTests
+        ? textFor("bottomTests")
+        : textFor(headingKeys[1]);
+  elements.backToAreas.hidden = !showingTopics;
+  elements.backToAreas.textContent = textFor("backToAreas");
   elements.testGrid.classList.toggle("review-grid", showingReview);
   if (showingReview) {
     renderReviewCards();
@@ -1476,7 +1598,9 @@ function renderDashboard() {
     : showingSaved
       ? [collectionDefinition("bookmarks")]
       : showingAreas
-        ? [...trainingDefinitions, collectionDefinition("mistakes")]
+        ? showingTopics
+          ? topicDefinitions.filter((topic) => topic.areaKey === appState.selectedAreaKey)
+          : [...trainingDefinitions, collectionDefinition("mistakes")]
         : testDefinitions;
   if (showingCollection && !definitions[0].questionIds.length) {
     const empty = document.createElement("div");
@@ -1499,13 +1623,15 @@ function renderDashboard() {
     const score = scoreFor(scoredQuestions(questions, test, testState), testState);
     const isCompleted = test.type === "test" ? Boolean(testState.completed) : questions.length > 0 && answered === questions.length;
     const card = document.createElement("article");
-    card.className = `test-card${test.available ? " available" : " locked"}${isCompleted ? " completed" : ""}${test.type === "area" ? " area-training" : ""}`;
+    card.className = `test-card${test.available ? " available" : " locked"}${isCompleted ? " completed" : ""}${test.type === "area" ? " area-training" : ""}${test.type === "topic" ? " topic-training" : ""}`;
 
     const top = document.createElement("div");
     top.className = "test-card-top";
     const title = document.createElement("h3");
     title.textContent = test.type === "area"
       ? areaLabel(test.areaKey)
+      : test.type === "topic"
+        ? topicLabel(test.areaKey, test.topicKey)
       : test.type === "collection"
         ? textFor(test.collectionKey === "mistakes" ? "mistakesTitle" : "savedTitle")
         : `Prov ${test.number}`;
@@ -1513,19 +1639,23 @@ function renderDashboard() {
     badge.className = `test-status-badge ${test.available ? "preview" : "coming"}`;
     badge.textContent = test.type === "area"
       ? textFor("areaPractice")
+      : test.type === "topic"
+        ? textFor("topicPractice")
       : test.type === "collection"
         ? textFor("collectionPractice")
       : test.available
         ? textFor("preview")
         : textFor("coming");
     top.append(title);
-    if (test.type !== "area") top.append(badge);
+    if (!["area", "topic"].includes(test.type)) top.append(badge);
 
     const details = document.createElement("div");
     details.className = "test-details";
     const questionCount = document.createElement("span");
     questionCount.textContent = test.type === "area"
       ? textFor("areaQuestions", questions.length)
+      : test.type === "topic"
+        ? textFor("topicQuestions", questions.length)
       : test.type === "collection"
         ? textFor("collectionQuestions", questions.length)
       : test.available
@@ -1534,16 +1664,22 @@ function renderDashboard() {
     const coverage = document.createElement("span");
     coverage.textContent = test.type === "area"
       ? `✓ ${areaLabel(test.areaKey)}`
+      : test.type === "topic"
+        ? `✓ ${areaLabel(test.areaKey)}`
       : test.type === "collection"
         ? test.requiredAreas.map((areaKey) => areaLabel(areaKey)).join(" · ")
         : `✓ ${textFor("allFive")}`;
     details.append(questionCount);
-    if (test.type !== "area") details.append(coverage);
+    if (!["area", "topic"].includes(test.type)) details.append(coverage);
 
     const visual = document.createElement("div");
-    if (test.type === "area" || test.type === "collection") {
-      visual.className = test.type === "area" ? `area-card-symbol area-${test.areaKey}` : "area-card-symbol";
-      visual.textContent = test.type === "area" ? areaSymbols[test.areaKey] : (test.collectionKey === "mistakes" ? "↻" : "★");
+    if (["area", "topic", "collection"].includes(test.type)) {
+      visual.className = ["area", "topic"].includes(test.type) ? `area-card-symbol area-${test.areaKey}` : "area-card-symbol";
+      visual.textContent = test.type === "area"
+        ? areaSymbols[test.areaKey]
+        : test.type === "topic"
+          ? test.icon
+          : (test.collectionKey === "mistakes" ? "↻" : "★");
       visual.setAttribute("aria-hidden", "true");
     } else {
       visual.className = "card-area-dots";
@@ -1575,12 +1711,23 @@ function renderDashboard() {
     button.disabled = !test.available;
     button.textContent = !test.available
       ? textFor("comingButton")
+      : test.type === "area"
+        ? textFor("chooseTopics")
       : isCompleted
         ? textFor("showResult")
         : answered > 0
           ? textFor("continue")
-          : textFor(test.type === "area" ? "startArea" : test.type === "collection" ? "startCollection" : "start");
-    if (test.available) button.addEventListener("click", () => openTest(test.id, isCompleted));
+          : textFor(test.type === "area" ? "chooseTopics" : test.type === "topic" ? "startTopic" : test.type === "collection" ? "startCollection" : "start");
+    if (test.available) button.addEventListener("click", () => {
+      if (test.type === "area") {
+        appState.selectedAreaKey = test.areaKey;
+        saveState();
+        renderApp();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+      openTest(test.id, isCompleted);
+    });
 
     card.append(top, details, visual, progressWrap, button);
     elements.testGrid.append(card);
@@ -1747,6 +1894,7 @@ function renderQuiz() {
     : null;
 
   const isAreaTraining = test.type === "area";
+  const isTopicTraining = test.type === "topic";
   const isCollectionTraining = test.type === "collection";
   const isExam = test.type === "test";
   const revealAnswer = !isExam || testState.reviewing;
@@ -1756,20 +1904,24 @@ function renderQuiz() {
     : "";
   elements.activeTestTitle.textContent = isAreaTraining
     ? areaLabel(test.areaKey)
+    : isTopicTraining
+      ? topicLabel(test.areaKey, test.topicKey)
     : isCollectionTraining
       ? collectionTitle
       : `Prov ${test.number}`;
-  elements.backHome.textContent = textFor(isAreaTraining ? "backAreas" : isCollectionTraining ? "backCollection" : "backHome");
-  elements.previewLabel.textContent = textFor(isAreaTraining ? "areaPractice" : isCollectionTraining ? "activeCollection" : "activePreview");
+  elements.backHome.textContent = textFor(isTopicTraining ? "backToTopics" : isAreaTraining ? "backAreas" : isCollectionTraining ? "backCollection" : "backHome");
+  elements.previewLabel.textContent = textFor(isTopicTraining ? "topicPractice" : isAreaTraining ? "areaPractice" : isCollectionTraining ? "activeCollection" : "activePreview");
   elements.sampleCount.textContent = questions.length;
-  elements.sampleSizeLabel.textContent = textFor(isAreaTraining ? "areaSize" : isCollectionTraining ? "collectionSize" : "previewSize");
+  elements.sampleSizeLabel.textContent = textFor(isTopicTraining ? "topicSize" : isAreaTraining ? "areaSize" : isCollectionTraining ? "collectionSize" : "previewSize");
   elements.category.textContent = areaLabel(question.officialArea);
   elements.category.className = `category-pill area-${question.officialArea}`;
-  elements.topic.textContent = currentLanguage === "sv"
-    ? question.topicSv
-    : currentLanguage === "ar"
-      ? question.topicAr
-      : `${question.topicAr} · ${question.topicSv}`;
+  elements.topic.textContent = isTopicTraining
+    ? topicLabel(test.areaKey, test.topicKey)
+    : currentLanguage === "sv"
+      ? question.topicSv
+      : currentLanguage === "ar"
+        ? question.topicAr
+        : `${question.topicAr} · ${question.topicSv}`;
   elements.number.textContent = textFor("question", testState.current + 1, questions.length);
   elements.questionCopy.dir = currentLanguage === "sv" ? "ltr" : "rtl";
   appendMachineTranslatedContent(elements.text, question, question.textAr, question.text);
@@ -1884,17 +2036,20 @@ function renderResult() {
   const gradedQuestions = scoredQuestions(questions, test, testState);
   const score = scoreFor(gradedQuestions, testState);
   const isAreaTraining = test.type === "area";
+  const isTopicTraining = test.type === "topic";
   const isCollectionTraining = test.type === "collection";
   const collectionTitle = isCollectionTraining
     ? textFor(test.collectionKey === "mistakes" ? "mistakesTitle" : "savedTitle")
     : "";
-  elements.resultKicker.textContent = textFor(isAreaTraining
+  elements.resultKicker.textContent = textFor(isAreaTraining || isTopicTraining
     ? "resultAreaKicker"
     : isCollectionTraining
       ? "resultCollectionKicker"
       : "resultKicker");
   elements.resultTitle.textContent = isAreaTraining
     ? textFor("resultAreaTitle", areaLabel(test.areaKey))
+    : isTopicTraining
+      ? textFor("resultAreaTitle", topicLabel(test.areaKey, test.topicKey))
     : isCollectionTraining
       ? textFor("resultCollectionTitle", collectionTitle)
       : textFor("resultTitle", test.number);
@@ -1902,7 +2057,7 @@ function renderResult() {
   elements.resultMessage.textContent = test.type === "test"
     ? `${textFor(examPassed(score) ? "passed" : "failed")} · ${textFor("resultMessage", answered, questions.length)}`
     : textFor("resultMessage", answered, questions.length);
-  elements.retry.textContent = isAreaTraining
+  elements.retry.textContent = isAreaTraining || isTopicTraining
     ? textFor("retryArea")
     : isCollectionTraining
       ? textFor("retryCollection")
@@ -2051,6 +2206,13 @@ elements.backHome.addEventListener("click", () => {
   renderApp();
 });
 
+elements.backToAreas.addEventListener("click", () => {
+  appState.selectedAreaKey = null;
+  saveState();
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
 elements.resultHome.addEventListener("click", () => {
   appState.view = "landing";
   saveState();
@@ -2070,6 +2232,7 @@ elements.retry.addEventListener("click", resetActiveTest);
 elements.startTraining.addEventListener("click", () => {
   appState.view = "home";
   appState.dashboardTab = "areas";
+  appState.selectedAreaKey = null;
   saveState();
   renderApp();
 });
@@ -2090,6 +2253,7 @@ function openBottomTab(tab) {
     return;
   }
   appState.dashboardTab = tab;
+  if (tab === "areas") appState.selectedAreaKey = null;
   saveState();
   renderApp();
   window.scrollTo({ top: 0, behavior: "smooth" });

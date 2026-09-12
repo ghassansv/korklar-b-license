@@ -313,6 +313,20 @@ button { cursor: pointer; }
   line-height: 1.7;
 }
 
+.back-topics-button {
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(11, 103, 96, 0.18);
+  border-radius: 14px;
+  color: var(--teal-800);
+  background: rgba(255, 255, 255, 0.9);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.back-topics-button:hover { background: #eaf7f3; }
+
 .test-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -340,6 +354,8 @@ button { cursor: pointer; }
 .test-card.completed { border-color: rgba(22, 163, 148, 0.45); }
 .test-card.area-training { min-height: 285px; }
 .test-card.area-training h3 { font-size: 1.08rem; line-height: 1.45; }
+.test-card.topic-training { min-height: 260px; }
+.test-card.topic-training h3 { font-size: 1.05rem; line-height: 1.45; }
 
 .area-card-symbol {
   width: 44px;
