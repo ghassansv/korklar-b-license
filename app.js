@@ -629,11 +629,54 @@ function applyArabicOverride(question) {
   };
 }
 
-const allQuestions = [
+const assembledQuestions = [
   ...builtInQuestions.filter((question) => !allImportedQuestionIds.has(question.id)),
   ...verifiedPdfQuestions,
   ...reviewedBatchQuestions
 ].map(applyArabicOverride);
+
+function numericIdValue(id) {
+  return Number(String(id).replace(/\D/g, "")) || 0;
+}
+
+function normalizedQuestionPart(value) {
+  return String(value || "")
+    .toLocaleLowerCase("sv-SE")
+    .normalize("NFKC")
+    .replace(/[^a-zåäö0-9]+/g, " ")
+    .trim();
+}
+
+function duplicateSignature(question) {
+  const answers = question.answers.map(normalizedQuestionPart).sort().join("|");
+  const correctAnswer = normalizedQuestionPart(question.answers[question.correct]);
+  return `${normalizedQuestionPart(question.text)}||${answers}||${correctAnswer}`;
+}
+
+function questionContentQuality(question) {
+  const genericExplanation = /وترتبط بسلامة المركبة|وهي التي تتوافق|لأنها تمنح وقتًا|لأنها تصف أثر|تقلل استهلاك الطاقة/.test(question.explanation || "");
+  return (question.gptTranslated ? 20 : 0)
+    + (Array.isArray(question.answerReasonsAr) ? 10 : 0)
+    + (genericExplanation ? 0 : 5)
+    + (question.contentNoteAr ? 2 : 0);
+}
+
+function deduplicateQuestions(questions) {
+  const bestBySignature = new Map();
+  questions.forEach((question) => {
+    const signature = duplicateSignature(question);
+    const current = bestBySignature.get(signature);
+    if (!current
+      || questionContentQuality(question) > questionContentQuality(current)
+      || (questionContentQuality(question) === questionContentQuality(current)
+        && numericIdValue(question.id) < numericIdValue(current.id))) {
+      bestBySignature.set(signature, question);
+    }
+  });
+  return [...bestBySignature.values()].sort((left, right) => numericIdValue(left.id) - numericIdValue(right.id));
+}
+
+const allQuestions = deduplicateQuestions(assembledQuestions);
 
 const officialAreas = {
   vehicle: { ar: "معرفة المركبة والتحكم بها", sv: "Fordonskännedom och manövrering" },
@@ -644,20 +687,14 @@ const officialAreas = {
 };
 
 const areaOrder = ["vehicle", "environment", "safety", "rules", "personal"];
-const trainingQuestionIds = [
-  ...verifiedPdfQuestions.map((question) => question.id),
-  ...reviewedBatchQuestions.map((question) => question.id)
-];
+const trainingQuestionIds = allQuestions.map((question) => question.id);
 const questionById = new Map(allQuestions.map((question) => [question.id, question]));
 
 function numericQuestionId(id) {
   return Number(id.replace(/\D/g, "")) || 0;
 }
 
-function buildMixedTests(questionIds, testCount = 18, questionsPerTest = 70) {
-  if (questionIds.length !== testCount * questionsPerTest) {
-    throw new Error(`Expected ${testCount * questionsPerTest} unique questions, found ${questionIds.length}`);
-  }
+function buildMixedTests(questionIds, testCount = Math.floor(questionIds.length / 70), questionsPerTest = 70) {
   const testBuckets = Array.from({ length: testCount }, () => []);
   const availableQuestions = questionIds
     .map((id) => questionById.get(id))
@@ -685,6 +722,7 @@ function buildMixedTests(questionIds, testCount = 18, questionsPerTest = 70) {
     .sort((left, right) => numericQuestionId(left.id) - numericQuestionId(right.id));
   let testCursor = 0;
   remainingPool.forEach((question) => {
+    if (testBuckets.every((bucket) => bucket.length >= questionsPerTest)) return;
     while (testBuckets[testCursor].length >= questionsPerTest) {
       testCursor = (testCursor + 1) % testCount;
     }
@@ -701,7 +739,7 @@ function buildMixedTests(questionIds, testCount = 18, questionsPerTest = 70) {
   });
 
   const uniqueIds = new Set(testBuckets.flat());
-  if (uniqueIds.size !== questionIds.length || testBuckets.some((bucket) => bucket.length !== questionsPerTest)) {
+  if (uniqueIds.size !== testCount * questionsPerTest || testBuckets.some((bucket) => bucket.length !== questionsPerTest)) {
     throw new Error("Prov distribution must contain every question exactly once");
   }
 
@@ -710,7 +748,7 @@ function buildMixedTests(questionIds, testCount = 18, questionsPerTest = 70) {
 
 const mixedTestQuestionIds = buildMixedTests(trainingQuestionIds);
 
-const testDefinitions = Array.from({ length: 18 }, (_, index) => ({
+const testDefinitions = mixedTestQuestionIds.map((questionIds, index) => ({
   id: `prov-${index + 1}`,
   type: "test",
   number: index + 1,
@@ -718,7 +756,7 @@ const testDefinitions = Array.from({ length: 18 }, (_, index) => ({
   preview: false,
   plannedQuestionCount: 70,
   requiredAreas: [...areaOrder],
-  questionIds: mixedTestQuestionIds[index]
+  questionIds
 }));
 
 const trainingDefinitions = areaOrder.map((areaKey) => ({
@@ -757,18 +795,18 @@ const interfaceText = {
     passed: "ناجح",
     failed: "غير ناجح",
     brandSubtitle: "تدريب القيادة السويدية",
-    sample: "1260 سؤالًا",
+    sample: "810 أسئلة فريدة",
     install: "تثبيت التطبيق",
     dashboardEyebrow: "خطة التدريب",
     dashboardTitle: "اختبارات رخصة القيادة B",
-    dashboardDescription: "18 اختبارًا متاحًا، وفي كل اختبار 70 سؤالًا مختلطًا من المجالات الخمسة.",
+    dashboardDescription: "11 اختبارًا متاحًا، وفي كل اختبار 70 سؤالًا فريدًا مختلطًا من المجالات الخمسة.",
     testsLabel: "اختبارًا",
     questionsLabel: "سؤالًا لكل اختبار",
     areasLabel: "مجالات في كل اختبار",
     coverageKicker: "Träningsområde",
     coverageTitle: "كل اختبار يمزج المجالات الرسمية الخمسة",
     testsKicker: "اختر الاختبار",
-    testsTitle: "Prov 1–18",
+    testsTitle: "Prov 1–11",
     sampleNote: "جميع الاختبارات متاحة الآن. كل Prov يضم 70 سؤالًا ويغطي مجالات Träningsområde الخمسة.",
     testsTab: "الاختبارات · Prov",
     areasTab: "التدريب حسب المجال",
@@ -871,20 +909,20 @@ const interfaceText = {
     passed: "Godkänd",
     failed: "Inte godkänd",
     brandSubtitle: "Svensk körkortsträning",
-    sample: "1260 frågor",
+    sample: "810 unika frågor",
     install: "Installera",
     dashboardEyebrow: "Träningsplan",
     dashboardTitle: "Kunskapsprov för B-körkort",
-    dashboardDescription: "18 tillgängliga prov med 70 blandade frågor från de fem områdena i varje prov.",
+    dashboardDescription: "11 tillgängliga prov med 70 unika, blandade frågor från de fem områdena i varje prov.",
     testsLabel: "prov",
     questionsLabel: "frågor per prov",
     areasLabel: "områden i varje prov",
     coverageKicker: "Träningsområde",
     coverageTitle: "Varje prov blandar de fem officiella områdena",
     testsKicker: "Välj prov",
-    testsTitle: "Prov 1–18",
+    testsTitle: "Prov 1–11",
     sampleNote: "Alla prov är tillgängliga. Varje prov innehåller 70 frågor och täcker alla fem Träningsområden.",
-    testsTab: "Prov 1–18",
+    testsTab: "Prov 1–11",
     areasTab: "Träna per område",
     reviewTab: (total) => `Granska (${total})`,
     areasKicker: "Välj Träningsområde",
@@ -985,18 +1023,18 @@ const interfaceText = {
     passed: "ناجح · Godkänd",
     failed: "غير ناجح · Inte godkänd",
     brandSubtitle: "تدريب القيادة · Svensk körkortsträning",
-    sample: "1260 سؤالًا · frågor",
+    sample: "810 أسئلة فريدة · unika frågor",
     install: "تثبيت · Installera",
     dashboardEyebrow: "خطة التدريب · Träningsplan",
     dashboardTitle: "اختبارات رخصة B · Kunskapsprov B",
-    dashboardDescription: "18 اختبارًا، وفي كل اختبار 70 سؤالًا مختلطًا من المجالات الخمسة · 18 prov med 70 blandade frågor från alla fem områden.",
+    dashboardDescription: "11 اختبارًا، وفي كل اختبار 70 سؤالًا فريدًا مختلطًا · 11 prov med 70 unika, blandade frågor.",
     testsLabel: "اختبارًا · prov",
     questionsLabel: "سؤالًا لكل اختبار · frågor per prov",
     areasLabel: "5 مجالات · 5 områden",
     coverageKicker: "Träningsområde",
     coverageTitle: "جميع المجالات في كل اختبار · Alla områden i varje prov",
     testsKicker: "اختر الاختبار · Välj prov",
-    testsTitle: "Prov 1–18",
+    testsTitle: "Prov 1–11",
     sampleNote: "جميع الاختبارات متاحة، 70 سؤالًا في كل Prov · Alla prov är tillgängliga med 70 frågor.",
     testsTab: "الاختبارات · Prov",
     areasTab: "حسب المجال · Per område",
@@ -1092,6 +1130,7 @@ const interfaceText = {
 };
 
 const STORAGE_KEY = "korklar-tests-v7";
+const QUESTION_SET_VERSION = 30;
 let currentLanguage = localStorage.getItem("korklar-language") || "ar";
 if (!interfaceText[currentLanguage]) currentLanguage = "ar";
 
@@ -1300,6 +1339,7 @@ function answeredFor(questions, testState) {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    questionSetVersion: QUESTION_SET_VERSION,
     dashboardTab: appState.dashboardTab,
     activeTestId: appState.activeTestId,
     tests: appState.tests,
@@ -1312,7 +1352,6 @@ function restoreState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem("korklar-tests-v6"));
     if (!saved || typeof saved.tests !== "object" || Array.isArray(saved.tests)) return;
-    appState.tests = saved.tests;
     const legacyBookmarks = Object.values(saved.tests).flatMap((testState) =>
       Array.isArray(testState?.bookmarks) ? testState.bookmarks : []
     );
@@ -1323,9 +1362,11 @@ function restoreState() {
     );
     appState.bookmarks = normalizedCollectionIds(saved.bookmarks || legacyBookmarks);
     appState.mistakes = normalizedCollectionIds(saved.mistakes || legacyMistakes);
+    const sameQuestionSet = saved.questionSetVersion === QUESTION_SET_VERSION;
+    appState.tests = sameQuestionSet ? saved.tests : {};
     if (["areas", "saved"].includes(saved.dashboardTab)) appState.dashboardTab = saved.dashboardTab;
     if (saved.dashboardTab === "mistakes") appState.dashboardTab = "areas";
-    if (getTestDefinition(saved.activeTestId)) appState.activeTestId = saved.activeTestId;
+    if (sameQuestionSet && getTestDefinition(saved.activeTestId)) appState.activeTestId = saved.activeTestId;
   } catch (_) {
     localStorage.removeItem(STORAGE_KEY);
   }
