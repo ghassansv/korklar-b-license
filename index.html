@@ -14,7 +14,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
     />
-    <link rel="stylesheet" href="./styles.css?v=32" />
+    <link rel="stylesheet" href="./styles.css?v=47" />
   </head>
   <body>
     <header class="topbar">
@@ -67,6 +67,11 @@
           </div>
           <button class="back-topics-button" id="back-to-areas-button" type="button" hidden>← المجالات</button>
         </div>
+        <div class="search-bar" id="search-bar">
+          <input type="search" id="search-input" class="search-input" placeholder="ابحث في نص السؤال أو الإجابات..." aria-label="بحث في نص السؤال أو الإجابات" />
+          <button type="button" id="search-button" class="secondary-button search-button">🔍 بحث</button>
+        </div>
+        <p class="search-status" id="search-status" hidden></p>
         <section class="test-grid" id="test-grid" aria-live="polite"></section>
       </section>
 
@@ -157,14 +162,15 @@
       </button>
     </nav>
 
-    <script src="./data/batch1-raw.js?v=32"></script>
-    <script src="./data/batch1-ar.js?v=32"></script>
-    <script src="./data/batch1-review-ar.js?v=32"></script>
-    <script src="./data/remaining-enriched.js?v=32"></script>
-    <script src="./data/resolved-review.js?v=32"></script>
-    <script src="./data/prov1-gpt-ar.js?v=32"></script>
-    <script src="./data/prov2-gpt-ar.js?v=32"></script>
-    <script src="./data/rules100-gpt-ar.js?v=32"></script>
-    <script src="./app.js?v=32"></script>
+    <script src="./data/batch1-raw.js?v=47"></script>
+    <script src="./data/batch1-ar.js?v=47"></script>
+    <script src="./data/batch1-review-ar.js?v=47"></script>
+    <script src="./data/remaining-enriched.js?v=47"></script>
+    <script src="./data/resolved-review.js?v=47"></script>
+    <script src="./data/prov1-gpt-ar.js?v=47"></script>
+    <script src="./data/prov2-gpt-ar.js?v=47"></script>
+    <script src="./data/rules100-gpt-ar.js?v=47"></script>
+    <script src="./data/cleanup-reviewed-ar.js?v=47"></script>
+    <script src="./app.js?v=47"></script>
   </body>
 </html>

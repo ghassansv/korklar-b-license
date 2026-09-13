@@ -327,6 +327,47 @@ button { cursor: pointer; }
 
 .back-topics-button:hover { background: #eaf7f3; }
 
+.search-bar {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: white;
+  color: var(--ink);
+}
+
+.search-input:focus {
+  outline: 2px solid var(--teal-500);
+  outline-offset: 1px;
+}
+
+.search-button {
+  min-height: 46px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.search-status {
+  margin: -0.4rem 0 1rem;
+  color: var(--danger);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .search-bar { flex-direction: column; }
+}
+
 .test-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

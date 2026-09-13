@@ -494,10 +494,12 @@ const remainingEnrichedQuestions = Array.isArray(window.KORKLAR_REMAINING_ENRICH
   ? window.KORKLAR_REMAINING_ENRICHED
   : [];
 const resolvedReviewDefaults = window.KORKLAR_RESOLVED_REVIEW || {};
+const cleanupSourceOverrides = window.KORKLAR_CLEANUP_SOURCE || {};
 const arabicOverrides = {
   ...(window.KORKLAR_PROV1_GPT_AR || {}),
   ...(window.KORKLAR_PROV2_GPT_AR || {}),
-  ...(window.KORKLAR_RULES100_GPT_AR || {})
+  ...(window.KORKLAR_RULES100_GPT_AR || {}),
+  ...(window.KORKLAR_CLEANUP_AR || {})
 };
 const REVIEW_STORAGE_KEY = "korklar-batch1-review-v1";
 
@@ -555,7 +557,7 @@ function buildBatchQuestion(question, metadata, officialArea, correct, manualExp
     imageAlt: `Bild till fråga ${question.sourcePage}`,
     imageAltAr: `صورة السؤال ${question.sourcePage}`,
     explanation: explanationAr,
-    explanationSv: `Rätt svar är ”${question.answersSv[correct]}”. ${batchReasonSvByArea[officialArea]}`,
+    explanationSv: question.explanationSv || `Rätt svar är ”${question.answersSv[correct]}”. ${batchReasonSvByArea[officialArea]}`,
     sourceLabel: source.sourceLabel,
     sourceUrl: source.sourceUrl,
     sourceFile: question.sourceFile,
@@ -629,6 +631,19 @@ function applyArabicOverride(question) {
   };
 }
 
+function applySourceCleanup(question) {
+  const override = cleanupSourceOverrides[question.id];
+  if (!override) return question;
+  if (override.answers && override.answers.length !== question.answers.length) {
+    throw new Error(`Swedish answer count does not match ${question.id}`);
+  }
+  return {
+    ...question,
+    text: override.text || question.text,
+    answers: override.answers || question.answers
+  };
+}
+
 const assembledQuestions = [
   ...builtInQuestions.filter((question) => !allImportedQuestionIds.has(question.id)),
   ...verifiedPdfQuestions,
@@ -677,17 +692,54 @@ function deduplicateQuestions(questions) {
 }
 
 const correctedAreaIds = {
-  rules: ["q101", "q167", "q443", "q542", "q639", "q713", "q871", "q945", "q982", "q1026", "q1029", "q1047"],
-  vehicle: ["q447", "q634", "q686", "q694", "q741", "q769", "q776", "q798", "q970", "q1194", "q1239"],
-  safety: ["q122", "q185", "q215", "q240", "q247", "q438", "q439", "q459", "q486", "q505", "q533", "q536", "q579", "q1022", "q1154", "q1172"],
+  rules: ["q028", "q061", "q081", "q095", "q101", "q167", "q179", "q183", "q213", "q285", "q401", "q437", "q443", "q464", "q467", "q498", "q542", "q609", "q639", "q668", "q713", "q871", "q879", "q945", "q982", "q1011", "q1025", "q1026", "q1029", "q1047", "q1057", "q1172"],
+  vehicle: ["q020", "q096", "q141", "q202", "q447", "q484", "q560", "q634", "q643", "q659", "q667", "q686", "q694", "q697", "q741", "q761", "q769", "q776", "q794", "q798", "q855", "q895", "q923", "q970", "q1194", "q1225", "q1239"],
+  safety: ["q122", "q163", "q185", "q200", "q215", "q239", "q240", "q241", "q247", "q322", "q438", "q439", "q459", "q471", "q486", "q488", "q505", "q506", "q533", "q536", "q579", "q864", "q950", "q1022", "q1131", "q1154"],
   environment: ["q435"],
-  personal: ["q117", "q126", "q136", "q160", "q169", "q510", "q553"]
+  personal: ["q117", "q126", "q136", "q160", "q169", "q510", "q553", "q859"]
 };
 const childRestraintQuestionIds = new Set(["q473", "q576", "q598", "q887", "q941"]);
 const correctedAreaById = new Map(Object.entries(correctedAreaIds)
   .flatMap(([areaKey, ids]) => ids.map((id) => [id, areaKey])));
 childRestraintQuestionIds.forEach((id) => correctedAreaById.set(id, "rules"));
-const allQuestions = deduplicateQuestions(assembledQuestions).map((question) => {
+const stageFiveAreaIds = {
+  vehicle: ["q456", "q568", "q586", "q632", "q651", "q679", "q687", "q688", "q692", "q698", "q701", "q718", "q728", "q750", "q802", "q805", "q835", "q839", "q870"],
+  safety: ["q119", "q198", "q210", "q422", "q448", "q458", "q478", "q557", "q565", "q580", "q594", "q611", "q889", "q1205", "q1233"],
+  personal: ["q118", "q130", "q144", "q152", "q429", "q465", "q582", "q988", "q1008"]
+};
+Object.entries(stageFiveAreaIds).forEach(([areaKey, ids]) =>
+  ids.forEach((id) => correctedAreaById.set(id, areaKey)));
+const stageSixAreaIds = {
+  rules: ["q267", "q663"],
+  vehicle: ["q647", "q675"],
+  environment: ["q569"],
+  safety: ["q515", "q616"]
+};
+Object.entries(stageSixAreaIds).forEach(([areaKey, ids]) =>
+  ids.forEach((id) => correctedAreaById.set(id, areaKey)));
+const stageSevenAreaIds = {
+  rules: ["q026", "q057", "q195", "q248", "q265", "q412", "q455", "q983", "q1024", "q1207"],
+  vehicle: ["q758", "q1019"],
+  safety: ["q109", "q208"],
+  personal: ["q424", "q1020"]
+};
+Object.entries(stageSevenAreaIds).forEach(([areaKey, ids]) =>
+  ids.forEach((id) => correctedAreaById.set(id, areaKey)));
+const stageEightAreaIds = {
+  vehicle: ["q613", "q656"],
+  rules: ["q636", "q735"]
+};
+Object.entries(stageEightAreaIds).forEach(([areaKey, ids]) =>
+  ids.forEach((id) => correctedAreaById.set(id, areaKey)));
+const stageNineAreaIds = {
+  rules: ["q296", "q1069"]
+};
+Object.entries(stageNineAreaIds).forEach(([areaKey, ids]) =>
+  ids.forEach((id) => correctedAreaById.set(id, areaKey)));
+const reviewedSemanticDuplicateIds = new Set(["q1164"]);
+const allQuestions = deduplicateQuestions(
+  deduplicateQuestions(assembledQuestions).map(applySourceCleanup)
+).filter((question) => !reviewedSemanticDuplicateIds.has(question.id)).map((question) => {
   const correctedArea = correctedAreaById.get(question.id);
   return correctedArea && question.officialArea !== correctedArea
     ? { ...question, officialArea: correctedArea }
@@ -766,8 +818,159 @@ function topicSearchText(question) {
   return [question.text, genericLabels.has(label) ? "" : label].join(" ").toLocaleLowerCase("sv-SE");
 }
 
+const reviewedTopicById = {
+  q020: "lighting-visibility",
+  q022: "position-turning",
+  q025: "railway",
+  q028: "railway",
+  q061: "railway",
+  q065: "priority-intersections",
+  q096: "lighting-visibility",
+  q116: "railway",
+  q141: "lighting-visibility",
+  q153: "priority-intersections",
+  q155: "railway",
+  q156: "other",
+  q179: "priority-intersections",
+  q183: "licence-duties",
+  q194: "priority-intersections",
+  q200: "speed-distance",
+  q202: "lighting-visibility",
+  q213: "parking-stopping",
+  q227: "other",
+  q230: "position-turning",
+  q231: "road-users",
+  q234: "parking-stopping",
+  q239: "vulnerable-road-users",
+  q241: "risk-awareness",
+  q246: "other",
+  q261: "parking-stopping",
+  q264: "position-turning",
+  q271: "licence-duties",
+  q270: "parking-stopping",
+  q324: "parking-stopping",
+  q331: "road-markings-signals",
+  q322: "risk-awareness",
+  q336: "licence-duties",
+  q344: "road-markings-signals",
+  q371: "other",
+  q402: "road-markings-signals",
+  q460: "position-turning",
+  q464: "overtaking-meeting",
+  q484: "lighting-visibility",
+  q488: "vulnerable-road-users",
+  q498: "licence-duties",
+  q506: "risk-awareness",
+  q541: "road-users",
+  q560: "vehicle-basics",
+  q561: "overtaking-meeting",
+  q573: "speed-roads",
+  q643: "vehicle-basics",
+  q667: "vehicle-basics",
+  q697: "vehicle-basics",
+  q761: "vehicle-basics",
+  q794: "maintenance-inspection",
+  q841: "position-turning",
+  q855: "vehicle-basics",
+  q859: "perception-reaction",
+  q861: "priority-intersections",
+  q862: "licence-duties",
+  q873: "licence-duties",
+  q879: "position-turning",
+  q884: "licence-duties",
+  q895: "vehicle-basics",
+  q914: "parking-stopping",
+  q923: "vehicle-basics",
+  q947: "priority-intersections",
+  q994: "lighting-visibility",
+  q1011: "licence-duties",
+  q1043: "signs-plates",
+  q1060: "signs-plates",
+  q1118: "railway",
+  q1128: "railway",
+  q1140: "road-markings-signals",
+  q1172: "licence-duties",
+  q1177: "parking-stopping",
+  q1199: "parking-stopping",
+  q924: "signs-plates",
+  q1251: "signs-plates"
+};
+const stageFiveTopicById = {
+  q045: "licence-duties", q046: "position-turning", q059: "railway",
+  q118: "perception-reaction", q119: "speed-distance", q130: "other",
+  q144: "attitudes-behaviour", q152: "attitudes-behaviour", q184: "priority-intersections",
+  q198: "risk-awareness", q199: "priority-intersections", q210: "risk-awareness",
+  q224: "road-markings-signals", q226: "road-markings-signals", q249: "road-users",
+  q288: "licence-duties", q329: "parking-stopping", q396: "licence-duties",
+  q422: "road-conditions", q429: "perception-reaction", q448: "risk-awareness",
+  q456: "safety-systems", q458: "road-conditions", q465: "perception-reaction",
+  q478: "risk-awareness", q557: "risk-awareness", q565: "road-conditions",
+  q568: "brakes-driving", q580: "road-conditions", q582: "perception-reaction",
+  q586: "lighting-visibility", q594: "accidents-first-aid", q611: "road-conditions",
+  q632: "loads-trailers", q651: "brakes-driving", q657: "signs-plates",
+  q679: "brakes-driving", q687: "vehicle-basics", q688: "maintenance-inspection",
+  q692: "loads-trailers", q698: "brakes-driving", q701: "brakes-driving",
+  q718: "maintenance-inspection", q728: "maintenance-inspection", q750: "brakes-driving",
+  q802: "brakes-driving", q805: "loads-trailers", q835: "loads-trailers",
+  q839: "brakes-driving", q870: "loads-trailers", q889: "risk-awareness",
+  q909: "signs-plates", q988: "perception-reaction", q1008: "attitudes-behaviour",
+  q1026: "signs-plates", q1029: "road-markings-signals", q1063: "signs-plates",
+  q1067: "signs-plates", q1086: "signs-plates", q1095: "signs-plates",
+  q1157: "licence-duties", q1205: "accidents-first-aid", q1233: "risk-awareness"
+};
+const stageSixTopicById = {
+  q267: "licence-duties", q442: "tyres-grip", q515: "road-conditions",
+  q569: "emissions-climate", q571: "tyres-grip", q616: "road-conditions",
+  q620: "maintenance-inspection", q631: "maintenance-inspection",
+  q647: "vehicle-basics", q654: "maintenance-inspection", q663: "licence-duties",
+  q673: "maintenance-inspection", q675: "vehicle-basics", q774: "brakes-driving",
+  q780: "maintenance-inspection", q1160: "safety-systems"
+};
+const stageSevenTopicById = {
+  q026: "other", q053: "risk-awareness", q057: "priority-intersections",
+  q108: "other", q109: "speed-distance", q137: "road-conditions",
+  q195: "other", q208: "vulnerable-road-users", q215: "vulnerable-road-users",
+  q228: "vulnerable-road-users", q248: "road-users", q265: "road-users",
+  q294: "vulnerable-road-users", q412: "road-users", q424: "perception-reaction",
+  q426: "risk-awareness", q455: "position-turning", q508: "road-conditions",
+  q533: "vulnerable-road-users", q536: "road-conditions", q543: "accidents-first-aid",
+  q547: "road-conditions", q567: "risk-awareness", q579: "vulnerable-road-users",
+  q625: "accidents-first-aid", q758: "loads-trailers", q867: "accidents-first-aid",
+  q983: "road-markings-signals", q1019: "lighting-visibility",
+  q1020: "perception-reaction", q1024: "road-markings-signals",
+  q1207: "licence-duties"
+};
+const stageEightTopicById = {
+  q042: "eco-driving", q140: "eco-driving", q446: "eco-driving",
+  q462: "eco-driving", q477: "eco-driving", q523: "eco-driving",
+  q538: "eco-driving", q613: "maintenance-inspection", q635: "emissions-climate",
+  q636: "licence-duties", q656: "maintenance-inspection", q670: "emissions-climate", q703: "emissions-climate",
+  q716: "emissions-climate", q735: "licence-duties", q775: "eco-driving",
+  q811: "emissions-climate", q896: "emissions-climate", q901: "eco-driving",
+  q952: "emissions-climate", q987: "eco-driving", q1006: "eco-driving",
+  q1034: "eco-driving", q1142: "eco-driving", q1158: "emissions-climate",
+  q1244: "emissions-climate", q463: "transport-choice", q550: "emissions-climate"
+};
+const stageNineTopicById = {
+  q117: "attitudes-behaviour", q124: "perception-reaction",
+  q130: "learning-experience", q160: "perception-reaction",
+  q169: "learning-experience", q170: "attitudes-behaviour",
+  q296: "signs-plates", q510: "attitudes-behaviour",
+  q1069: "signs-plates"
+};
+
 function trainingTopicForQuestion(question) {
   const catalog = trainingTopicCatalog[question.officialArea] || [];
+  const reviewedTopicId = stageNineTopicById[question.id]
+    || stageEightTopicById[question.id]
+    || stageSevenTopicById[question.id]
+    || stageSixTopicById[question.id]
+    || stageFiveTopicById[question.id]
+    || reviewedTopicById[question.id];
+  if (reviewedTopicId) {
+    const reviewedTopic = catalog.find((topic) => topic.id === reviewedTopicId);
+    if (reviewedTopic) return reviewedTopic;
+  }
   if (["q598", "q941"].includes(question.id)) return catalog.find((topic) => topic.id === "children-passengers");
   if (question.id === "q1018") return catalog.find((topic) => topic.id === "priority-intersections");
   if (question.officialArea === "rules" && /vägmärk|\bmärke(?:t|n|na)?\b|skylt|tilläggstavl/i.test(question.text)) {
@@ -1024,7 +1227,11 @@ const interfaceText = {
     activeCollection: "تدريب مخصص",
     resultCollectionKicker: "نتيجة التدريب المخصص",
     resultCollectionTitle: (title) => `نتيجة ${title}`,
-    retryCollection: "إعادة التدريب"
+    retryCollection: "إعادة التدريب",
+    searchPlaceholder: "ابحث في نص السؤال أو الإجابات...",
+    searchButtonLabel: "🔍 بحث",
+    searchTitle: "نتائج البحث",
+    searchNoResults: "لا توجد أسئلة مطابقة لكلمة البحث."
   },
   sv: {
     landingKicker: "Välj studiesätt",
@@ -1145,7 +1352,11 @@ const interfaceText = {
     activeCollection: "Anpassad träning",
     resultCollectionKicker: "Resultat för anpassad träning",
     resultCollectionTitle: (title) => `Resultat: ${title}`,
-    retryCollection: "Träna igen"
+    retryCollection: "Träna igen",
+    searchPlaceholder: "Sök i frågetext eller svar...",
+    searchButtonLabel: "🔍 Sök",
+    searchTitle: "Sökresultat",
+    searchNoResults: "Inga frågor matchar sökordet."
   },
   both: {
     landingKicker: "اختر طريقة الدراسة · Välj studiesätt",
@@ -1266,12 +1477,16 @@ const interfaceText = {
     activeCollection: "تدريب مخصص · Anpassad träning",
     resultCollectionKicker: "نتيجة مخصصة · Anpassat resultat",
     resultCollectionTitle: (title) => `${title} · النتيجة`,
-    retryCollection: "إعادة التدريب · Träna igen"
+    retryCollection: "إعادة التدريب · Träna igen",
+    searchPlaceholder: "ابحث في نص السؤال أو الإجابات... · Sök i frågetext eller svar...",
+    searchButtonLabel: "🔍 بحث · Sök",
+    searchTitle: "نتائج البحث · Sökresultat",
+    searchNoResults: "لا توجد أسئلة مطابقة لكلمة البحث. · Inga frågor matchar sökordet."
   }
 };
 
 const STORAGE_KEY = "korklar-tests-v7";
-const QUESTION_SET_VERSION = 32;
+const QUESTION_SET_VERSION = 42;
 let currentLanguage = localStorage.getItem("korklar-language") || "ar";
 if (!interfaceText[currentLanguage]) currentLanguage = "ar";
 
@@ -1282,7 +1497,8 @@ const appState = {
   activeTestId: null,
   tests: {},
   mistakes: [],
-  bookmarks: []
+  bookmarks: [],
+  search: []
 };
 
 const elements = {
@@ -1305,6 +1521,9 @@ const elements = {
   testsTitle: document.querySelector("#tests-title"),
   backToAreas: document.querySelector("#back-to-areas-button"),
   testGrid: document.querySelector("#test-grid"),
+  searchInput: document.querySelector("#search-input"),
+  searchButton: document.querySelector("#search-button"),
+  searchStatus: document.querySelector("#search-status"),
   backHome: document.querySelector("#back-home-button"),
   progressTitle: document.querySelector("#progress-title"),
   correctLabel: document.querySelector("#correct-label"),
@@ -1437,6 +1656,18 @@ function normalizedCollectionIds(ids) {
     .sort((left, right) => numericQuestionId(left) - numericQuestionId(right));
 }
 
+function collectionTitleKey(collectionKey) {
+  if (collectionKey === "mistakes") return "mistakesTitle";
+  if (collectionKey === "bookmarks") return "savedTitle";
+  return "searchTitle";
+}
+
+function collectionIcon(collectionKey) {
+  if (collectionKey === "mistakes") return "↻";
+  if (collectionKey === "bookmarks") return "★";
+  return "🔍";
+}
+
 function collectionDefinition(collectionKey) {
   const id = `collection-${collectionKey}`;
   const snapshot = appState.tests[id]?.collectionQuestionIds;
@@ -1459,6 +1690,7 @@ function collectionDefinition(collectionKey) {
 function getTestDefinition(testId = appState.activeTestId) {
   if (testId === "collection-mistakes") return collectionDefinition("mistakes");
   if (testId === "collection-bookmarks") return collectionDefinition("bookmarks");
+  if (testId === "collection-search") return collectionDefinition("search");
   return activityDefinitions.find((test) => test.id === testId) || null;
 }
 
@@ -1669,7 +1901,7 @@ function renderDashboard() {
       : test.type === "topic"
         ? topicLabel(test.areaKey, test.topicKey)
       : test.type === "collection"
-        ? textFor(test.collectionKey === "mistakes" ? "mistakesTitle" : "savedTitle")
+        ? textFor(collectionTitleKey(test.collectionKey))
         : `Prov ${test.number}`;
     const badge = document.createElement("span");
     badge.className = `test-status-badge ${test.available ? "preview" : "coming"}`;
@@ -1715,7 +1947,7 @@ function renderDashboard() {
         ? areaSymbols[test.areaKey]
         : test.type === "topic"
           ? test.icon
-          : (test.collectionKey === "mistakes" ? "↻" : "★");
+          : collectionIcon(test.collectionKey);
       visual.setAttribute("aria-hidden", "true");
     } else {
       visual.className = "card-area-dots";
@@ -1936,7 +2168,7 @@ function renderQuiz() {
   const revealAnswer = !isExam || testState.reviewing;
   elements.quizView.classList.toggle("exam-mode", isExam && !testState.reviewing);
   const collectionTitle = isCollectionTraining
-    ? textFor(test.collectionKey === "mistakes" ? "mistakesTitle" : "savedTitle")
+    ? textFor(collectionTitleKey(test.collectionKey))
     : "";
   elements.activeTestTitle.textContent = isAreaTraining
     ? areaLabel(test.areaKey)
@@ -2075,7 +2307,7 @@ function renderResult() {
   const isTopicTraining = test.type === "topic";
   const isCollectionTraining = test.type === "collection";
   const collectionTitle = isCollectionTraining
-    ? textFor(test.collectionKey === "mistakes" ? "mistakesTitle" : "savedTitle")
+    ? textFor(collectionTitleKey(test.collectionKey))
     : "";
   elements.resultKicker.textContent = textFor(isAreaTraining || isTopicTraining
     ? "resultAreaKicker"
@@ -2253,6 +2485,49 @@ elements.resultHome.addEventListener("click", () => {
   appState.view = "landing";
   saveState();
   renderApp();
+});
+
+function normalizeSearchText(value) {
+  return String(value || "")
+    .toLocaleLowerCase()
+    .normalize("NFKC")
+    .replace(/[ً-ْ]/g, "")
+    .replace(/[إأآا]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه");
+}
+
+function performSearch() {
+  if (!elements.searchInput) return;
+  const rawQuery = elements.searchInput.value.trim();
+  if (elements.searchStatus) elements.searchStatus.hidden = true;
+  if (!rawQuery) return;
+  const query = normalizeSearchText(rawQuery);
+  const matches = allQuestions.filter((question) => {
+    const haystack = normalizeSearchText([
+      question.text,
+      question.textAr,
+      ...(Array.isArray(question.answers) ? question.answers : []),
+      ...(Array.isArray(question.answersAr) ? question.answersAr : [])
+    ].join(" "));
+    return haystack.includes(query);
+  });
+  appState.search = matches.map((question) => question.id);
+  if (!matches.length) {
+    if (elements.searchStatus) {
+      elements.searchStatus.hidden = false;
+      elements.searchStatus.textContent = textFor("searchNoResults");
+    }
+    return;
+  }
+  openTest("collection-search");
+}
+
+elements.searchButton?.addEventListener("click", performSearch);
+elements.searchInput?.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  performSearch();
 });
 
 elements.review.addEventListener("click", () => {
