@@ -1,4 +1,5 @@
 window.KORKLAR_CLEANUP_SOURCE = {
+  q113: { image: null },
   q134: { answers: ["Att jag lättare kommer ihåg mina kunskaper lång tid efter utbildningen", "Att jag bättre behåller mina körkunskaper efter ett längre uppehåll med bilkörningen", "Att jag bryter mot trafikreglerna eftersom jag inte förstår varför de finns"] },
   q145: { answers: ["Därför att de ofta visar ett aggressivt beteende i trafiken", "Därför att de ofta gör manövrar i trafiken utan att tänka på konsekvenserna", "Därför att de ofta kör fortare än andra trafikanter"] },
   q162: { answers: ["Ett med- eller motlut", "Hastigheten", "Väglaget", "Trötthet och ouppmärksamhet"] },

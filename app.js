@@ -499,7 +499,8 @@ const arabicOverrides = {
   ...(window.KORKLAR_PROV1_GPT_AR || {}),
   ...(window.KORKLAR_PROV2_GPT_AR || {}),
   ...(window.KORKLAR_RULES100_GPT_AR || {}),
-  ...(window.KORKLAR_CLEANUP_AR || {})
+  ...(window.KORKLAR_CLEANUP_AR || {}),
+  ...(window.KORKLAR_SAMPLE_TEN_AR || {})
 };
 const REVIEW_STORAGE_KEY = "korklar-batch1-review-v1";
 
@@ -640,7 +641,8 @@ function applySourceCleanup(question) {
   return {
     ...question,
     text: override.text || question.text,
-    answers: override.answers || question.answers
+    answers: override.answers || question.answers,
+    image: Object.prototype.hasOwnProperty.call(override, "image") ? override.image : question.image
   };
 }
 
@@ -1229,7 +1231,7 @@ const interfaceText = {
     resultCollectionKicker: "نتيجة التدريب المخصص",
     resultCollectionTitle: (title) => `نتيجة ${title}`,
     retryCollection: "إعادة التدريب",
-    searchPlaceholder: "ابحث في نص السؤال أو الإجابات...",
+    searchPlaceholder: "ابحث بالكلمات أو برقم السؤال، مثل q067...",
     searchButtonLabel: "🔍 بحث",
     searchTitle: "نتائج البحث",
     searchNoResults: "لا توجد أسئلة مطابقة لكلمة البحث."
@@ -1354,7 +1356,7 @@ const interfaceText = {
     resultCollectionKicker: "Resultat för anpassad träning",
     resultCollectionTitle: (title) => `Resultat: ${title}`,
     retryCollection: "Träna igen",
-    searchPlaceholder: "Sök i frågetext eller svar...",
+    searchPlaceholder: "Sök med ord eller frågenummer, till exempel q067...",
     searchButtonLabel: "🔍 Sök",
     searchTitle: "Sökresultat",
     searchNoResults: "Inga frågor matchar sökordet."
@@ -1479,7 +1481,7 @@ const interfaceText = {
     resultCollectionKicker: "نتيجة مخصصة · Anpassat resultat",
     resultCollectionTitle: (title) => `${title} · النتيجة`,
     retryCollection: "إعادة التدريب · Träna igen",
-    searchPlaceholder: "ابحث في نص السؤال أو الإجابات... · Sök i frågetext eller svar...",
+    searchPlaceholder: "ابحث بالكلمات أو برقم السؤال · Sök med ord eller frågenummer, t.ex. q067...",
     searchButtonLabel: "🔍 بحث · Sök",
     searchTitle: "نتائج البحث · Sökresultat",
     searchNoResults: "لا توجد أسئلة مطابقة لكلمة البحث. · Inga frågor matchar sökordet."
@@ -1785,6 +1787,9 @@ function renderInterfaceText() {
   elements.bottomTestsLabel.textContent = textFor("bottomTests");
   elements.bottomAreasLabel.textContent = textFor("bottomAreas");
   elements.bottomSavedLabel.textContent = textFor("bottomSaved");
+  elements.searchInput.placeholder = textFor("searchPlaceholder");
+  elements.searchInput.setAttribute("aria-label", textFor("searchPlaceholder"));
+  elements.searchButton.textContent = textFor("searchButtonLabel");
   elements.bottomNav.setAttribute("aria-label", currentLanguage === "sv" ? "Huvudnavigering" : "التنقل الرئيسي");
 }
 
@@ -2373,7 +2378,16 @@ function openTest(testId, showSavedResult = false) {
   const testState = getTestState(testId);
   ensureExamExclusions(test, testState);
   testState.reviewing = false;
-  if (test.type === "collection") testState.collectionQuestionIds = [...test.questionIds];
+  if (test.type === "collection") {
+    testState.collectionQuestionIds = [...test.questionIds];
+    if (!showSavedResult && testState.completed) {
+      testState.completed = false;
+      const firstUnanswered = test.questionIds.findIndex((id) =>
+        !Object.prototype.hasOwnProperty.call(testState.responses, id)
+      );
+      testState.current = Math.max(firstUnanswered, 0);
+    }
+  }
   appState.view = showSavedResult ? "result" : "quiz";
   saveState();
   renderApp();
@@ -2504,7 +2518,9 @@ function performSearch() {
   if (elements.searchStatus) elements.searchStatus.hidden = true;
   if (!rawQuery) return;
   const query = normalizeSearchText(rawQuery);
+  const exactQuestionNumber = /^q?0*(\d+)$/i.exec(rawQuery);
   const matches = allQuestions.filter((question) => {
+    if (exactQuestionNumber) return numericQuestionId(question.id) === Number(exactQuestionNumber[1]);
     const haystack = normalizeSearchText([
       question.text,
       question.textAr,
@@ -2521,6 +2537,7 @@ function performSearch() {
     }
     return;
   }
+  appState.tests["collection-search"] = blankTestState();
   openTest("collection-search");
 }
 
