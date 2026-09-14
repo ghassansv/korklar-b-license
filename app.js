@@ -1208,6 +1208,7 @@ const interfaceText = {
     retry: (number) => `إعادة Prov ${number}`,
     retryArea: "إعادة تدريب المجال",
     bottomHome: "الرئيسية",
+    bottomTheory: "النظرية",
     bottomTests: "الاختبارات",
     bottomAreas: "التدريب",
     bottomMistakes: "الأخطاء",
@@ -1333,6 +1334,7 @@ const interfaceText = {
     retry: (number) => `Gör om Prov ${number}`,
     retryArea: "Träna området igen",
     bottomHome: "Hem",
+    bottomTheory: "Teori",
     bottomTests: "Prov",
     bottomAreas: "Träna",
     bottomMistakes: "Fel",
@@ -1458,6 +1460,7 @@ const interfaceText = {
     retry: (number) => `إعادة Prov ${number} · Gör om`,
     retryArea: "إعادة المجال · Träna igen",
     bottomHome: "الرئيسية · Hem",
+    bottomTheory: "النظرية · Teori",
     bottomTests: "الاختبارات · Prov",
     bottomAreas: "التدريب · Träna",
     bottomMistakes: "الأخطاء · Fel",
@@ -1501,7 +1504,8 @@ const appState = {
   tests: {},
   mistakes: [],
   bookmarks: [],
-  search: []
+  search: [],
+  theoryLesson: null
 };
 
 const elements = {
@@ -1519,6 +1523,53 @@ const elements = {
   language: document.querySelector("#language-select"),
   install: document.querySelector("#install-button"),
   dashboardView: document.querySelector("#dashboard-view"),
+  theoryView: document.querySelector("#theory-view"),
+  theoryHome: document.querySelector("#theory-home"),
+  weightsLesson: document.querySelector("#weights-lesson"),
+  alcoholLesson: document.querySelector("#alcohol-lesson"),
+  childrenLesson: document.querySelector("#children-lesson"),
+  speedLesson: document.querySelector("#speed-lesson"),
+  vehicleLesson: document.querySelector("#vehicle-lesson"),
+  openWeightsLesson: document.querySelector("#open-weights-lesson"),
+  openAlcoholLesson: document.querySelector("#open-alcohol-lesson"),
+  openChildrenLesson: document.querySelector("#open-children-lesson"),
+  openSpeedLesson: document.querySelector("#open-speed-lesson"),
+  openVehicleLesson: document.querySelector("#open-vehicle-lesson"),
+  backToTheory: document.querySelector("#back-to-theory"),
+  backFromAlcohol: document.querySelector("#back-from-alcohol"),
+  backFromChildren: document.querySelector("#back-from-children"),
+  backFromSpeed: document.querySelector("#back-from-speed"),
+  backFromVehicle: document.querySelector("#back-from-vehicle"),
+  practiceWeightsTopic: document.querySelector("#practice-weights-topic"),
+  practiceAlcoholTopic: document.querySelector("#practice-alcohol-topic"),
+  practiceChildrenTopic: document.querySelector("#practice-children-topic"),
+  practicePassengersTopic: document.querySelector("#practice-passengers-topic"),
+  practiceSpeedSafetyTopic: document.querySelector("#practice-speed-safety-topic"),
+  practiceSpeedRulesTopic: document.querySelector("#practice-speed-rules-topic"),
+  practiceVehicleTyres: document.querySelector("#practice-vehicle-tyres"),
+  practiceVehicleBrakes: document.querySelector("#practice-vehicle-brakes"),
+  practiceVehicleLights: document.querySelector("#practice-vehicle-lights"),
+  practiceVehicleInspection: document.querySelector("#practice-vehicle-inspection"),
+  reactionCalculator: document.querySelector("#reaction-calculator"),
+  reactionSpeed: document.querySelector("#reaction-speed"),
+  reactionTime: document.querySelector("#reaction-time"),
+  reactionResult: document.querySelector("#reaction-result"),
+  brakingRatioCalculator: document.querySelector("#braking-ratio-calculator"),
+  brakingSpeedFirst: document.querySelector("#braking-speed-first"),
+  brakingSpeedSecond: document.querySelector("#braking-speed-second"),
+  brakingRatioResult: document.querySelector("#braking-ratio-result"),
+  stoppingCalculator: document.querySelector("#stopping-calculator"),
+  stoppingReaction: document.querySelector("#stopping-reaction"),
+  stoppingBraking: document.querySelector("#stopping-braking"),
+  stoppingResult: document.querySelector("#stopping-result"),
+  licenceCalculator: document.querySelector("#licence-calculator"),
+  carTotalWeight: document.querySelector("#car-total-weight"),
+  trailerTotalWeight: document.querySelector("#trailer-total-weight"),
+  licenceResult: document.querySelector("#licence-result"),
+  payloadCalculator: document.querySelector("#payload-calculator"),
+  vehicleTotalWeight: document.querySelector("#vehicle-total-weight"),
+  vehicleServiceWeight: document.querySelector("#vehicle-service-weight"),
+  payloadResult: document.querySelector("#payload-result"),
   quizView: document.querySelector("#quiz-view"),
   resultView: document.querySelector("#result-view"),
   testsTitle: document.querySelector("#tests-title"),
@@ -1567,10 +1618,12 @@ const elements = {
   retry: document.querySelector("#retry-button"),
   bottomNav: document.querySelector("#mobile-bottom-nav"),
   bottomHome: document.querySelector("#bottom-home-button"),
+  bottomTheory: document.querySelector("#bottom-theory-button"),
   bottomTests: document.querySelector("#bottom-tests-button"),
   bottomAreas: document.querySelector("#bottom-areas-button"),
   bottomSaved: document.querySelector("#bottom-saved-button"),
   bottomHomeLabel: document.querySelector("#bottom-home-label"),
+  bottomTheoryLabel: document.querySelector("#bottom-theory-label"),
   bottomTestsLabel: document.querySelector("#bottom-tests-label"),
   bottomAreasLabel: document.querySelector("#bottom-areas-label"),
   bottomSavedLabel: document.querySelector("#bottom-saved-label"),
@@ -1784,6 +1837,7 @@ function renderInterfaceText() {
   elements.resultHome.textContent = textFor("resultHome");
   elements.review.textContent = textFor("review");
   elements.bottomHomeLabel.textContent = textFor("bottomHome");
+  elements.bottomTheoryLabel.textContent = textFor("bottomTheory");
   elements.bottomTestsLabel.textContent = textFor("bottomTests");
   elements.bottomAreasLabel.textContent = textFor("bottomAreas");
   elements.bottomSavedLabel.textContent = textFor("bottomSaved");
@@ -1795,6 +1849,7 @@ function renderInterfaceText() {
 
 function activeBottomTab() {
   if (appState.view === "landing") return "home";
+  if (appState.view === "theory") return "theory";
   if (appState.view === "home") {
     return ["tests", "areas", "saved"].includes(appState.dashboardTab)
       ? appState.dashboardTab
@@ -1811,6 +1866,7 @@ function renderBottomNavigation() {
   const currentTab = activeBottomTab();
   const buttons = {
     home: elements.bottomHome,
+    theory: elements.bottomTheory,
     tests: elements.bottomTests,
     areas: elements.bottomAreas,
     saved: elements.bottomSaved
@@ -1822,6 +1878,15 @@ function renderBottomNavigation() {
   });
   elements.bottomSavedCount.textContent = String(normalizedCollectionIds(appState.bookmarks).length);
   elements.bottomSavedCount.dataset.count = String(normalizedCollectionIds(appState.bookmarks).length);
+}
+
+function renderTheory() {
+  elements.theoryHome.hidden = Boolean(appState.theoryLesson);
+  elements.weightsLesson.hidden = appState.theoryLesson !== "weights";
+  elements.alcoholLesson.hidden = appState.theoryLesson !== "alcohol";
+  elements.childrenLesson.hidden = appState.theoryLesson !== "children";
+  elements.speedLesson.hidden = appState.theoryLesson !== "speed";
+  elements.vehicleLesson.hidden = appState.theoryLesson !== "vehicle";
 }
 
 function makeAreaPill(areaKey, compact = false) {
@@ -2364,10 +2429,12 @@ function renderApp() {
   renderBottomNavigation();
   elements.landingView.hidden = appState.view !== "landing";
   elements.dashboardView.hidden = appState.view !== "home";
+  elements.theoryView.hidden = appState.view !== "theory";
   elements.quizView.hidden = appState.view !== "quiz";
   elements.resultView.hidden = appState.view !== "result";
   if (appState.view === "quiz") renderQuiz();
   else if (appState.view === "result") renderResult();
+  else if (appState.view === "theory") renderTheory();
   else renderDashboard();
 }
 
@@ -2573,10 +2640,197 @@ elements.startExams.addEventListener("click", () => {
   renderApp();
 });
 
+elements.openWeightsLesson.addEventListener("click", () => {
+  appState.theoryLesson = "weights";
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.backToTheory.addEventListener("click", () => {
+  appState.theoryLesson = null;
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.openAlcoholLesson.addEventListener("click", () => {
+  appState.theoryLesson = "alcohol";
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.backFromAlcohol.addEventListener("click", () => {
+  appState.theoryLesson = null;
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.openChildrenLesson.addEventListener("click", () => {
+  appState.theoryLesson = "children";
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.backFromChildren.addEventListener("click", () => {
+  appState.theoryLesson = null;
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.openSpeedLesson.addEventListener("click", () => {
+  appState.theoryLesson = "speed";
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.backFromSpeed.addEventListener("click", () => {
+  appState.theoryLesson = null;
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.openVehicleLesson.addEventListener("click", () => {
+  appState.theoryLesson = "vehicle";
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.backFromVehicle.addEventListener("click", () => {
+  appState.theoryLesson = null;
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elements.practiceWeightsTopic.addEventListener("click", () => {
+  openTest("topic-vehicle-loads-trailers");
+});
+
+elements.practiceAlcoholTopic.addEventListener("click", () => {
+  openTest("topic-personal-alcohol-drugs");
+});
+
+elements.practiceChildrenTopic.addEventListener("click", () => {
+  openTest("topic-rules-children-passengers");
+});
+
+elements.practicePassengersTopic.addEventListener("click", () => {
+  openTest("topic-rules-passenger-seats");
+});
+
+elements.practiceSpeedSafetyTopic.addEventListener("click", () => {
+  openTest("topic-safety-speed-distance");
+});
+
+elements.practiceSpeedRulesTopic.addEventListener("click", () => {
+  openTest("topic-rules-speed-roads");
+});
+
+elements.practiceVehicleTyres.addEventListener("click", () => openTest("topic-vehicle-tyres-grip"));
+elements.practiceVehicleBrakes.addEventListener("click", () => openTest("topic-vehicle-brakes-driving"));
+elements.practiceVehicleLights.addEventListener("click", () => openTest("topic-vehicle-lighting-visibility"));
+elements.practiceVehicleInspection.addEventListener("click", () => openTest("topic-vehicle-maintenance-inspection"));
+
+function calculatorValues(...inputs) {
+  return inputs.map((input) => Number(input.value));
+}
+
+function showCalculatorResult(output, message, isError = false) {
+  output.textContent = message;
+  output.classList.toggle("error", isError);
+}
+
+function formatLessonNumber(value) {
+  return new Intl.NumberFormat("ar", { maximumFractionDigits: 1 }).format(value);
+}
+
+elements.reactionCalculator.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const [speed, seconds] = calculatorValues(elements.reactionSpeed, elements.reactionTime);
+  if (!Number.isFinite(speed) || !Number.isFinite(seconds) || speed <= 0 || speed > 300 || seconds <= 0 || seconds > 10) {
+    showCalculatorResult(elements.reactionResult, "أدخل سرعة بين 1 و300 كم/ساعة وزمنًا بين 0.1 و10 ثوانٍ.", true);
+    return;
+  }
+  const metersPerSecond = speed / 3.6;
+  const distance = metersPerSecond * seconds;
+  showCalculatorResult(elements.reactionResult, `${formatLessonNumber(speed)} ÷ 3.6 = ${formatLessonNumber(metersPerSecond)} متر/ثانية؛ خلال ${formatLessonNumber(seconds)} ثانية تقطع نحو ${formatLessonNumber(distance)} مترًا قبل الكبح.`);
+});
+
+elements.brakingRatioCalculator.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const [first, second] = calculatorValues(elements.brakingSpeedFirst, elements.brakingSpeedSecond);
+  if (!Number.isFinite(first) || !Number.isFinite(second) || first <= 0 || second <= 0 || first > 300 || second > 300) {
+    showCalculatorResult(elements.brakingRatioResult, "أدخل سرعتين أكبر من صفر ولا تتجاوزان 300 كم/ساعة.", true);
+    return;
+  }
+  const factor = (second / first) ** 2;
+  showCalculatorResult(elements.brakingRatioResult, `النسبة = (${formatLessonNumber(second)} ÷ ${formatLessonNumber(first)})² ≈ ${formatLessonNumber(factor)}. مسافة الكبح عند السرعة الثانية تقارب ${formatLessonNumber(factor)} من مسافتها الأولى إذا بقيت ظروف الكبح نفسها.`);
+});
+
+elements.stoppingCalculator.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const [reaction, braking] = calculatorValues(elements.stoppingReaction, elements.stoppingBraking);
+  if (!Number.isFinite(reaction) || !Number.isFinite(braking) || reaction < 0 || braking < 0 || reaction > 10000 || braking > 10000) {
+    showCalculatorResult(elements.stoppingResult, "أدخل مسافتين غير سالبتين ولا تتجاوز أي منهما 10000 متر.", true);
+    return;
+  }
+  showCalculatorResult(elements.stoppingResult, `مسافة التوقف = ${formatLessonNumber(reaction)} + ${formatLessonNumber(braking)} = ${formatLessonNumber(reaction + braking)} مترًا.`);
+});
+
+elements.licenceCalculator.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const [carWeight, trailerWeight] = calculatorValues(elements.carTotalWeight, elements.trailerTotalWeight);
+  if (!Number.isFinite(carWeight) || !Number.isFinite(trailerWeight) || carWeight <= 0 || trailerWeight < 0) {
+    showCalculatorResult(elements.licenceResult, "أدخل وزنًا صحيحًا للسيارة والمقطورة.", true);
+    return;
+  }
+  if (carWeight > 3500) {
+    showCalculatorResult(elements.licenceResult, "السيارة نفسها تتجاوز 3500 كغ؛ لا ينطبق عليها الحساب العادي لرخص B أو B96 أو BE.", true);
+    return;
+  }
+  const combinedWeight = carWeight + trailerWeight;
+  let licence;
+  let reason;
+  if (trailerWeight <= 750 || combinedWeight <= 3500) {
+    licence = "B";
+    reason = trailerWeight <= 750
+      ? "لأن الوزن الإجمالي للمقطورة لا يتجاوز 750 كغ."
+      : "لأن مجموع الوزنَين الإجماليَّين لا يتجاوز 3500 كغ.";
+  } else if (combinedWeight <= 4250) {
+    licence = "B96";
+    reason = "لأن المجموع أكبر من 3500 كغ، لكنه لا يتجاوز 4250 كغ.";
+  } else if (trailerWeight <= 3500) {
+    licence = "BE";
+    reason = "لأن المجموع يتجاوز 4250 كغ، بينما الوزن الإجمالي للمقطورة لا يتجاوز 3500 كغ.";
+  } else {
+    showCalculatorResult(elements.licenceResult, `المجموع ${combinedWeight} كغ، والمقطورة تتجاوز 3500 كغ. هذا خارج حدود BE العادية؛ افحص الفئة المطلوبة رسميًا.`, true);
+    return;
+  }
+  showCalculatorResult(elements.licenceResult, `النتيجة المبدئية: رخصة ${licence}. المجموع ${combinedWeight} كغ. ${reason} افحص أيضًا الحدود التقنية في شهادة التسجيل.`);
+});
+
+elements.payloadCalculator.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const [totalWeight, serviceWeight] = calculatorValues(elements.vehicleTotalWeight, elements.vehicleServiceWeight);
+  if (!Number.isFinite(totalWeight) || !Number.isFinite(serviceWeight) || totalWeight <= 0 || serviceWeight <= 0) {
+    showCalculatorResult(elements.payloadResult, "أدخل الوزن الإجمالي ووزن الخدمة بصورة صحيحة.", true);
+    return;
+  }
+  if (serviceWeight > totalWeight) {
+    showCalculatorResult(elements.payloadResult, "وزن الخدمة لا يمكن أن يكون أكبر من الوزن الإجمالي.", true);
+    return;
+  }
+  const payload = totalWeight - serviceWeight;
+  showCalculatorResult(elements.payloadResult, `الحمولة القصوى = ${totalWeight} − ${serviceWeight} = ${payload} كغ. تشمل هذه الحمولة الركاب الآخرين والأمتعة والبضائع.`);
+});
+
 function openBottomTab(tab) {
-  appState.view = tab === "home" ? "landing" : "home";
+  appState.view = tab === "home" ? "landing" : tab === "theory" ? "theory" : "home";
   if (tab === "home") {
     saveState();
+    renderApp();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  if (tab === "theory") {
     renderApp();
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
@@ -2589,6 +2843,7 @@ function openBottomTab(tab) {
 }
 
 elements.bottomHome.addEventListener("click", () => openBottomTab("home"));
+elements.bottomTheory.addEventListener("click", () => openBottomTab("theory"));
 elements.bottomTests.addEventListener("click", () => openBottomTab("tests"));
 elements.bottomAreas.addEventListener("click", () => openBottomTab("areas"));
 elements.bottomSaved.addEventListener("click", () => openBottomTab("saved"));

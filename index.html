@@ -14,7 +14,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
     />
-    <link rel="stylesheet" href="./styles.css?v=62" />
+    <link rel="stylesheet" href="./styles.css?v=69" />
   </head>
   <body>
     <header class="topbar">
@@ -73,6 +73,504 @@
         </div>
         <p class="search-status" id="search-status" hidden></p>
         <section class="test-grid" id="test-grid" aria-live="polite"></section>
+      </section>
+
+      <section class="theory-view" id="theory-view" hidden dir="rtl" lang="ar">
+        <div id="theory-home">
+          <div class="theory-page-heading">
+            <span class="theory-kicker">تعلّم القاعدة قبل حل الأسئلة</span>
+            <h1>النظرية بالعربية</h1>
+            <p>دروس قصيرة تشرح الفكرة، ثم تطبّقها على مثال يشبه أسئلة الاختبار.</p>
+          </div>
+          <div class="theory-topic-grid">
+            <button class="theory-topic-card weights" id="open-weights-lesson" type="button">
+              <span class="theory-topic-icon" aria-hidden="true">⚖</span>
+              <span>
+                <small>الدرس الأول</small>
+                <strong>الأوزان والحمولة والمقطورة</strong>
+                <em>افهم المصطلحات، احسب الحمولة، واختر فئة الرخصة الصحيحة</em>
+              </span>
+              <b aria-hidden="true">←</b>
+            </button>
+            <button class="theory-topic-card alcohol" id="open-alcohol-lesson" type="button">
+              <span class="theory-topic-icon" aria-hidden="true">0.2</span>
+              <span>
+                <small>الدرس الثاني</small>
+                <strong>الكحول والقيادة</strong>
+                <em>افهم الحدود القانونية، تأثير الكحول، والوقت اللازم لتخلّص الجسم منه</em>
+              </span>
+              <b aria-hidden="true">←</b>
+            </button>
+            <button class="theory-topic-card children" id="open-children-lesson" type="button">
+              <span class="theory-topic-icon" aria-hidden="true">♙</span>
+              <span>
+                <small>الدرس الثالث</small>
+                <strong>الأطفال والركاب</strong>
+                <em>اختر وسيلة الحماية الصحيحة وافهم مسؤولية السائق والوسادة الهوائية</em>
+              </span>
+              <b aria-hidden="true">←</b>
+            </button>
+            <button class="theory-topic-card speed" id="open-speed-lesson" type="button">
+              <span class="theory-topic-icon" aria-hidden="true">50</span>
+              <span>
+                <small>الدرس الرابع</small>
+                <strong>السرعة ومسافات القيادة</strong>
+                <em>احسب ردّ الفعل والتوقف، وافهم لماذا تتضاعف مسافة الكبح بسرعة</em>
+              </span>
+              <b aria-hidden="true">←</b>
+            </button>
+            <button class="theory-topic-card vehicle" id="open-vehicle-lesson" type="button">
+              <span class="theory-topic-icon" aria-hidden="true">✦</span>
+              <span>
+                <small>الدرس الخامس</small>
+                <strong>المركبة: افهمها قبل القيادة</strong>
+                <em>الإطارات والفرامل والإضاءة والأعطال والفحص بخطوات سهلة</em>
+              </span>
+              <b aria-hidden="true">←</b>
+            </button>
+          </div>
+        </div>
+
+        <article class="theory-lesson" id="weights-lesson" hidden>
+          <button class="theory-back" id="back-to-theory" type="button">→ جميع الدروس</button>
+          <header class="lesson-hero">
+            <div>
+              <span class="lesson-number">01</span>
+              <span class="theory-kicker">الأوزان والحمولة والمقطورة</span>
+              <h1>افهم الوزن بدل أن تحفظ الأرقام فقط</h1>
+              <p>كل سؤال أوزان يبدأ بسؤالين: هل يريد معرفة <strong>فئة الرخصة</strong>، أم يريد معرفة <strong>ما تستطيع السيارة سحبه فعليًا</strong>؟</p>
+            </div>
+            <div class="memory-rule">
+              <span>قاعدة الذاكرة</span>
+              <strong>الرخصة ← الوزن الإجمالي</strong>
+              <strong>قدرة السيارة ← الوزن الفعلي</strong>
+            </div>
+          </header>
+
+          <nav class="lesson-jumps" aria-label="أقسام الدرس">
+            <a href="#weight-terms">المصطلحات</a>
+            <a href="#licence-choice">اختيار الرخصة</a>
+            <a href="#weight-calculator">حاسبة سريعة</a>
+            <a href="#safe-loading">التحميل الآمن</a>
+          </nav>
+
+          <section class="lesson-section" id="weight-terms">
+            <div class="lesson-section-title"><span>1</span><div><h2>أربعة أوزان يجب التفريق بينها</h2><p>ابحث أولًا عن الكلمة المستخدمة في السؤال.</p></div></div>
+            <div class="term-grid">
+              <article class="term-card blue">
+                <span class="term-symbol">جاهز</span>
+                <h3>وزن الخدمة <small>Tjänstevikt</small></h3>
+                <p>وزن المركبة وهي جاهزة للقيادة. في السيارة يدخل السائق والوقود والسوائل والتجهيزات الأساسية، ولا يدخل الركاب الآخرون أو الأمتعة.</p>
+              </article>
+              <article class="term-card green">
+                <span class="term-symbol">المسموح</span>
+                <h3>الحمولة القصوى <small>Maxlast</small></h3>
+                <p>أكبر وزن مسموح إضافته من الركاب والأمتعة والبضائع.</p>
+                <div class="formula">الحمولة القصوى = الوزن الإجمالي − وزن الخدمة</div>
+              </article>
+              <article class="term-card amber">
+                <span class="term-symbol">على الورق</span>
+                <h3>الوزن الإجمالي <small>Totalvikt</small></h3>
+                <p>وزن الخدمة مع الحمولة القصوى. قيمة ثابتة في شهادة التسجيل، وهي الوزن المستخدم عادةً لاختيار فئة الرخصة.</p>
+              </article>
+              <article class="term-card rose">
+                <span class="term-symbol">الآن</span>
+                <h3>الوزن الفعلي <small>Bruttovikt</small></h3>
+                <p>وزن المركبة الحقيقي في هذه اللحظة: وزنها مع ما تحمله الآن. يتغير عند إضافة راكب أو حقيبة أو إنزال حمولة.</p>
+              </article>
+            </div>
+            <div class="compare-strip">
+              <div><strong>ثابت في الأوراق</strong><span>وزن الخدمة · الوزن الإجمالي · الحمولة القصوى</span></div>
+              <div><strong>يتغيّر أثناء الرحلة</strong><span>الوزن الفعلي</span></div>
+            </div>
+          </section>
+
+          <section class="lesson-section" id="licence-choice">
+            <div class="lesson-section-title"><span>2</span><div><h2>كيف تختار فئة الرخصة؟</h2><p>اجمع الوزن الإجمالي للسيارة والمقطورة، ثم اتبع المسار.</p></div></div>
+            <div class="licence-path">
+              <article class="licence-card licence-b"><b>B</b><div><h3>رخصة B العادية</h3><p>سيارة وزنها الإجمالي لا يتجاوز 3500 كغ، ومعها مقطورة وزنها الإجمالي حتى 750 كغ. وإذا كانت المقطورة أثقل من 750 كغ، يجب ألا يتجاوز مجموع الوزنَين الإجماليَّين 3500 كغ.</p></div></article>
+              <article class="licence-card licence-b96"><b>B96</b><div><h3>رخصة B الموسّعة</h3><p>عندما يزيد مجموع الوزنَين الإجماليَّين على 3500 كغ، ولا يتجاوز 4250 كغ.</p></div></article>
+              <article class="licence-card licence-be"><b>BE</b><div><h3>رخصة BE</h3><p>سيارة وزنها الإجمالي حتى 3500 كغ، ومقطورة أو مقطورات مجموع وزنها الإجمالي حتى 3500 كغ.</p></div></article>
+            </div>
+
+            <div class="worked-example">
+              <div class="example-label">مثال محلول</div>
+              <h3>سيارة 3000 كغ + مقطورة 1000 كغ</h3>
+              <div class="calculation"><span>3000</span><i>+</i><span>1000</span><i>=</i><strong>4000 كغ</strong></div>
+              <p>المقطورة أثقل من 750 كغ، والمجموع أكبر من 3500 وأصغر من 4250؛ إذن أدنى فئة مناسبة هي <strong>B96</strong>.</p>
+            </div>
+
+            <aside class="important-note">
+              <span aria-hidden="true">!</span>
+              <p><strong>نجاح حساب الرخصة لا يكفي وحده.</strong> يجب أيضًا ألا يتجاوز الوزن الفعلي للمقطورة الحد الذي تسمح للسيارة بسحبه، وألا يتجاوز الوزن الفعلي للمجموعة حد القطار المسجّل للمركبة.</p>
+            </aside>
+          </section>
+
+          <section class="lesson-section calculator-section" id="weight-calculator">
+            <div class="lesson-section-title"><span>3</span><div><h2>جرّب الحساب بنفسك</h2><p>هذه أداة تعليمية لتثبيت طريقة التفكير.</p></div></div>
+            <div class="calculator-grid">
+              <form class="theory-calculator" id="licence-calculator">
+                <h3>ما فئة الرخصة المبدئية؟</h3>
+                <label>الوزن الإجمالي للسيارة (كغ)<input id="car-total-weight" type="number" min="1" max="10000" inputmode="numeric" placeholder="مثال: 3000" /></label>
+                <label>الوزن الإجمالي للمقطورة (كغ)<input id="trailer-total-weight" type="number" min="0" max="10000" inputmode="numeric" placeholder="مثال: 1000" /></label>
+                <button type="submit">احسب الفئة</button>
+                <output class="calculator-result" id="licence-result" aria-live="polite">أدخل الوزنَين ثم اضغط «احسب الفئة».</output>
+              </form>
+              <form class="theory-calculator" id="payload-calculator">
+                <h3>كم تبلغ الحمولة القصوى؟</h3>
+                <label>الوزن الإجمالي (كغ)<input id="vehicle-total-weight" type="number" min="1" max="10000" inputmode="numeric" placeholder="مثال: 2100" /></label>
+                <label>وزن الخدمة (كغ)<input id="vehicle-service-weight" type="number" min="1" max="10000" inputmode="numeric" placeholder="مثال: 1650" /></label>
+                <button type="submit">احسب الحمولة</button>
+                <output class="calculator-result" id="payload-result" aria-live="polite">الوزن الإجمالي − وزن الخدمة = الحمولة القصوى.</output>
+              </form>
+            </div>
+            <p class="calculator-disclaimer">النتيجة تعليمية. قبل القيادة افحص دائمًا شهادة تسجيل السيارة والمقطورة أو حاسبة المقطورات الرسمية.</p>
+          </section>
+
+          <section class="lesson-section" id="safe-loading">
+            <div class="lesson-section-title"><span>4</span><div><h2>الحمولة الآمنة</h2><p>الوزن الصحيح يجب أن يكون موزعًا ومثبتًا بصورة صحيحة أيضًا.</p></div></div>
+            <div class="safety-grid">
+              <article><span>↓</span><h3>ضع الثقيل منخفضًا</h3><p>يساعد انخفاض مركز الثقل على ثبات المركبة ويقلل الميلان.</p></article>
+              <article><span>↔</span><h3>وزّع الحمولة</h3><p>تجنب تركيز الوزن على جانب واحد، وراعِ حدود المحاور وضغط وصلة المقطورة.</p></article>
+              <article><span>⌁</span><h3>ثبّت كل شيء</h3><p>يجب ألا تتحرك الحمولة أو تسقط عند الفرملة أو الانعطاف أو المناورة.</p></article>
+              <article><span>✓</span><h3>افحص قبل الانطلاق</h3><p>افحص الوصلة وسلك الأمان والإضاءة والإطارات، ثم أعد الفحص بعد مسافة قصيرة.</p></article>
+            </div>
+          </section>
+
+          <section class="lesson-summary">
+            <div><span>تذكّر في الاختبار</span><h2>اسم الوزن يحدد طريقة الحل</h2><ol><li>حدّد: رخصة أم قدرة تقنية؟</li><li>استخدم الوزن الإجمالي للرخصة.</li><li>استخدم الوزن الفعلي للحدود التقنية.</li><li>طبّق الحد الأصغر دائمًا.</li></ol></div>
+            <button id="practice-weights-topic" type="button">تدرّب على أسئلة الأوزان والمقطورة ←</button>
+          </section>
+        </article>
+
+        <article class="theory-lesson alcohol-lesson" id="alcohol-lesson" hidden>
+          <button class="theory-back" id="back-from-alcohol" type="button">→ جميع الدروس</button>
+          <header class="lesson-hero alcohol-hero">
+            <div>
+              <span class="lesson-number">02</span>
+              <span class="theory-kicker">الكحول والقيادة</span>
+              <h1>التأثير يبدأ قبل الحد القانوني</h1>
+              <p>الحد القانوني يحدد متى تبدأ جريمة القيادة تحت تأثير الكحول، لكنه لا يعني أن القيادة تصبح آمنة تحته. حتى الكميات الصغيرة قد تُضعف الانتباه ورد الفعل.</p>
+            </div>
+            <div class="memory-rule alcohol-memory">
+              <span>قاعدة الذاكرة</span>
+              <strong>0.2‰ = قيادة تحت تأثير الكحول</strong>
+              <strong>1.0‰ = جريمة جسيمة</strong>
+              <small>الأكثر أمانًا للقيادة: صفر كحول</small>
+            </div>
+          </header>
+
+          <nav class="lesson-jumps" aria-label="أقسام درس الكحول">
+            <a href="#alcohol-law">حدود القانون</a>
+            <a href="#alcohol-effects">التأثير</a>
+            <a href="#alcohol-time">الحساب والزمن</a>
+            <a href="#alcohol-myths">مفاهيم خاطئة</a>
+          </nav>
+
+          <section class="lesson-section" id="alcohol-law">
+            <div class="lesson-section-title"><span>1</span><div><h2>احفظ الحد ووحدة القياس</h2><p>قد يأتي السؤال بالدم أو بهواء الزفير.</p></div></div>
+            <div class="legal-limit-grid">
+              <article class="limit-card warning">
+                <small>Rattfylleri</small>
+                <strong>0.2‰</strong>
+                <span>في الدم</span>
+                <i>أو</i>
+                <strong>0.10 mg/l</strong>
+                <span>في هواء الزفير</span>
+                <p>من هذا الحد تبدأ جريمة القيادة تحت تأثير الكحول.</p>
+              </article>
+              <article class="limit-card danger">
+                <small>Grovt rattfylleri</small>
+                <strong>1.0‰</strong>
+                <span>في الدم</span>
+                <i>أو</i>
+                <strong>0.50 mg/l</strong>
+                <span>في هواء الزفير</span>
+                <p>حد الجريمة الجسيمة، ويمكن اعتبارها جسيمة أيضًا عند وجود تأثير شديد أو خطر واضح على السلامة.</p>
+              </article>
+            </div>
+            <aside class="important-note red-note"><span>!</span><p><strong>لا تتعامل مع 0.2‰ كهدف.</strong> يمكن أن تتدهور القيادة قبل بلوغه، كما قد يُدان السائق إذا كان عاجزًا عن القيادة الآمنة بسبب التأثير.</p></aside>
+          </section>
+
+          <section class="lesson-section" id="alcohol-effects">
+            <div class="lesson-section-title"><span>2</span><div><h2>ماذا يفعل الكحول بالسائق؟</h2><p>فكّر في سلسلة واحدة: ترى أقل، تفهم أبطأ، وتتصرف متأخرًا.</p></div></div>
+            <div class="effect-flow">
+              <article><span>👁</span><h3>الرؤية</h3><p>تسوء رؤية الظلام وتقدير المسافة، تزداد حساسية الإبهار، وقد يضيق مجال الانتباه.</p></article>
+              <b>←</b>
+              <article><span>⌛</span><h3>رد الفعل</h3><p>يحتاج الدماغ وقتًا أطول لفهم الموقف واختيار التصرف، خصوصًا في المواقف المعقدة.</p></article>
+              <b>←</b>
+              <article><span>⚠</span><h3>الحكم على الخطر</h3><p>تزداد الثقة بالنفس بينما تقل القدرة الحقيقية، فيختار السائق سرعة أو مسافة غير مناسبة.</p></article>
+              <b>←</b>
+              <article><span>◎</span><h3>التحكم</h3><p>يضعف التنسيق بين الأعصاب والعضلات، فتقل دقة التوجيه والفرملة.</p></article>
+            </div>
+            <div class="cause-box"><strong>لماذا يزيد خطر الحادث؟</strong><p>لأن السائق قد يلاحظ الخطر متأخرًا، ويُقدّره بصورة خاطئة، ثم ينفّذ المناورة بدقة أقل. تتراكم هذه الأخطاء في الموقف نفسه.</p></div>
+          </section>
+
+          <section class="lesson-section alcohol-time-section" id="alcohol-time">
+            <div class="lesson-section-title"><span>3</span><div><h2>كيف تفهم حساب الزمن؟</h2><p>يُستخدم المتوسط في مسائل النظرية فقط، وليس لاتخاذ قرار القيادة.</p></div></div>
+            <div class="burn-rate-card">
+              <div><small>متوسط تقريبي</small><strong>0.15‰</strong><span>يحرقه الجسم في الساعة</span></div>
+              <p>سرعة التخلص تختلف بين الأشخاص وبين المرات المختلفة للشخص نفسه. الطعام قد يبطئ امتصاص الكحول، لكنه لا يزيله، ولا يوجد شيء يسرّع عمل الكبد بصورة موثوقة.</p>
+            </div>
+            <div class="worked-example alcohol-example">
+              <div class="example-label">مثال تعليمي</div>
+              <h3>إذا كان المستوى 1.0‰، فما الزمن النظري للوصول إلى صفر؟</h3>
+              <div class="calculation"><span>1.0</span><i>÷</i><span>0.15</span><i>≈</i><strong>6 ساعات و40 دقيقة</strong></div>
+              <p>هذه نتيجة حسابية تقريبية فقط. الجسم لا يعمل كساعة ثابتة، وقد تبقى القدرة على القيادة أسوأ في اليوم التالي حتى بعد وصول القياس إلى صفر.</p>
+            </div>
+            <div class="time-steps">
+              <div><span>1</span><p>اقرأ مستوى البداية في السؤال.</p></div>
+              <div><span>2</span><p>استخدم المتوسط الذي يعطيه السؤال، أو 0.15‰ عند سؤالك عن المتوسط المعروف.</p></div>
+              <div><span>3</span><p>الزمن التقريبي = مستوى الكحول ÷ معدل الحرق.</p></div>
+              <div><span>4</span><p>في الحياة الواقعية: لا تستخدم الناتج لتقرير متى تقود.</p></div>
+            </div>
+          </section>
+
+          <section class="lesson-section" id="standard-drink">
+            <div class="lesson-section-title"><span>4</span><div><h2>ما معنى كأس معياري؟</h2><p>أحجام مختلفة قد تحتوي على كمية متقاربة من الكحول النقي.</p></div></div>
+            <div class="drink-grid">
+              <article><strong>33 cl</strong><span>بيرة قوية</span></article>
+              <article><strong>12 cl</strong><span>نبيذ</span></article>
+              <article><strong>4 cl</strong><span>مشروب روحي</span></article>
+            </div>
+            <p class="standard-note">كل مثال يعادل تقريبًا كأسًا معياريًا يحتوي على 12 غرامًا من الكحول. لا يعني تساوي الكؤوس أن تأثيرها متطابق لدى الجميع.</p>
+          </section>
+
+          <section class="lesson-section" id="alcohol-myths">
+            <div class="lesson-section-title"><span>5</span><div><h2>ما الذي يزيل الكحول؟</h2><p>الإجابة التي تتكرر في أسئلة النظرية: الوقت.</p></div></div>
+            <div class="myth-grid">
+              <article><span>☕</span><h3>القهوة</h3><p>قد تجعلك أكثر يقظة، لكنها لا تسرّع تخلّص الجسم من الكحول.</p></article>
+              <article><span>◌</span><h3>الدش البارد</h3><p>يغيّر شعورك مؤقتًا، ولا يخفض تركيز الكحول في الدم.</p></article>
+              <article><span>⌂</span><h3>النوم</h3><p>يمر الوقت أثناء النوم، لكن النوم نفسه ليس علاجًا سريعًا ولا يضمن الجاهزية صباحًا.</p></article>
+              <article class="truth"><span>⌛</span><h3>الوقت</h3><p>هو العامل الذي يسمح للجسم بالتخلص من الكحول. لا توجد حيلة تختصر الزمن.</p></article>
+            </div>
+          </section>
+
+          <section class="lesson-summary alcohol-summary">
+            <div><span>تذكّر في الاختبار</span><h2>صفر كحول هو القرار الآمن</h2><ol><li>0.2‰ في الدم = الحد القانوني للجريمة.</li><li>1.0‰ = الحد العددي للجريمة الجسيمة.</li><li>الكحول يضعف الرؤية ورد الفعل والحكم والتحكم.</li><li>الوقت وحده يخلّص الجسم منه، والمتوسط ليس ضمانًا فرديًا.</li></ol></div>
+            <button id="practice-alcohol-topic" type="button">تدرّب على أسئلة الكحول والأدوية ←</button>
+          </section>
+        </article>
+
+        <article class="theory-lesson children-lesson" id="children-lesson" hidden>
+          <button class="theory-back" id="back-from-children" type="button">→ جميع الدروس</button>
+          <header class="lesson-hero children-hero">
+            <div>
+              <span class="lesson-number">03</span>
+              <span class="theory-kicker">الأطفال والركاب</span>
+              <h1>الحماية تُختار لحجم الطفل</h1>
+              <p>العمر يساعدك على معرفة المرحلة، لكن <strong>الطول وحدود المقعد</strong> هما ما يحددان متى ينتقل الطفل إلى حماية أخرى.</p>
+            </div>
+            <div class="memory-rule children-memory">
+              <span>قاعدة الذاكرة</span>
+              <strong>أقل من 135 سم ← حماية خاصة</strong>
+              <strong>مقعد خلفي الاتجاه ← لا وسادة هوائية أمامية فعّالة</strong>
+              <small>السائق مسؤول عن الركاب دون 15 سنة</small>
+            </div>
+          </header>
+
+          <nav class="lesson-jumps" aria-label="أقسام درس الأطفال والركاب">
+            <a href="#child-protection">اختيار الحماية</a>
+            <a href="#rear-facing">لماذا للخلف؟</a>
+            <a href="#child-airbag">الوسادة الهوائية</a>
+            <a href="#driver-responsibility">مسؤولية السائق</a>
+          </nav>
+
+          <section class="lesson-section" id="child-protection">
+            <div class="lesson-section-title"><span>1</span><div><h2>أي وسيلة حماية يحتاج الطفل؟</h2><p>انتقل إلى المرحلة التالية عندما يتجاوز الطفل حدود الطول أو الوزن الخاصة بالمقعد، وليس لمجرد بلوغ عيد ميلاد معين.</p></div></div>
+            <div class="child-stage-flow">
+              <article class="stage-baby"><span>1</span><div><small>المرحلة الأولى</small><h3>مقعد الرضيع</h3><p>للرضيع حتى يستطيع الجلوس بثبات أو يتجاوز الحد المسموح للمقعد. يُستخدم مواجهًا للخلف.</p></div></article>
+              <b aria-hidden="true">←</b>
+              <article class="stage-rear"><span>2</span><div><small>بعد مقعد الرضيع</small><h3>مقعد طفل مواجه للخلف</h3><p>هو الخيار الأكثر حماية للطفل الصغير. التوصية أن يستمر حتى 4–5 سنوات على الأقل، ويفضل أطول ما تسمح به حدود المقعد.</p></div></article>
+              <b aria-hidden="true">←</b>
+              <article class="stage-booster"><span>3</span><div><small>بعد تجاوز المقعد الخلفي</small><h3>مقعد أو وسادة رافعة</h3><p>ترفع الطفل حتى يمر حزام السيارة على الكتف والحوض بصورة صحيحة. القانون يفرض حماية خاصة لمن يقل طوله عن 135 سم.</p></div></article>
+            </div>
+            <div class="height-rule"><span aria-hidden="true">↕</span><div><small>الحد القانوني الأساسي</small><strong>أقل من 135 سم</strong><p>يجب استخدام مقعد رضيع أو مقعد طفل أو مقعد/وسادة رافعة مناسبة ومعتمدة.</p></div></div>
+          </section>
+
+          <section class="lesson-section" id="rear-facing">
+            <div class="lesson-section-title"><span>2</span><div><h2>لماذا يكون المقعد مواجهًا للخلف؟</h2><p>لأن رأس الطفل كبير وثقيل بالنسبة إلى جسمه، بينما رقبته ما زالت ضعيفة.</p></div></div>
+            <div class="collision-compare">
+              <article class="unsafe-direction"><div class="direction-icon">→</div><h3>مواجه للأمام</h3><p>عند التصادم الأمامي يمسك الحزام الجسم، لكن الرأس يستمر إلى الأمام وتتحمل الرقبة القوة.</p></article>
+              <article class="safe-direction"><div class="direction-icon">←</div><h3>مواجه للخلف</h3><p>يوزّع ظهر المقعد قوة التوقف على الرأس والرقبة والظهر معًا، فتقل القوة المركزة على الرقبة.</p></article>
+            </div>
+            <aside class="important-note green-note"><span>✓</span><p><strong>الساقان المثنيتان لا تعنيان أن المقعد أصبح صغيرًا.</strong> افحص حدود الطول والوزن وتعليمات الشركة المصنّعة لتعرف متى يجب تغييره.</p></aside>
+          </section>
+
+          <section class="lesson-section" id="child-airbag">
+            <div class="lesson-section-title"><span>3</span><div><h2>المقعد والوسادة الهوائية</h2><p>حدّد أولًا اتجاه مقعد الطفل، ثم افحص حالة الوسادة الهوائية أمامه.</p></div></div>
+            <div class="airbag-rule-card">
+              <div class="airbag-danger-symbol" aria-hidden="true">×</div>
+              <div><small>تحذير مهم</small><h3>لا تضع مقعدًا مواجهًا للخلف أمام وسادة هوائية فعّالة</h3><p>عند انطلاق الوسادة قد تضرب ظهر مقعد الطفل بقوة شديدة. إذا كان المقعد في الأمام، يجب تعطيل وسادة الراكب بالطريقة المعتمدة للسيارة.</p></div>
+            </div>
+            <div class="airbag-facts">
+              <article><strong>140 سم</strong><p>التوصية أن يبلغ الطفل 140 سم على الأقل قبل الجلوس أمام وسادة أمامية فعّالة، ما لم تذكر الشركة المصنّعة للسيارة تعليمات أخرى.</p></article>
+              <article><strong>جانبية</strong><p>الوسائد الجانبية والستائر الهوائية لا تُعد الخطر نفسه على الطفل المثبّت بصورة صحيحة؛ اتبع تعليمات السيارة والمقعد.</p></article>
+            </div>
+          </section>
+
+          <section class="lesson-section" id="driver-responsibility">
+            <div class="lesson-section-title"><span>4</span><div><h2>من يتحمل المسؤولية؟</h2><p>في أسئلة الاختبار انتبه إلى عمر الراكب.</p></div></div>
+            <div class="responsibility-split">
+              <article><span>أقل من 15</span><h3>السائق مسؤول</h3><p>يجب على السائق التأكد من استخدام حزام الأمان أو وسيلة حماية الأطفال المناسبة بصورة صحيحة.</p></article>
+              <article><span>15 أو أكثر</span><h3>الراكب مسؤول عن نفسه</h3><p>يجب على الراكب استخدام الحزام في المقعد المجهز به. المسؤولية الشخصية لا تجعل القيادة دون حزام آمنة.</p></article>
+            </div>
+            <div class="passenger-checklist">
+              <h3>قبل التحرك</h3>
+              <ul><li>لكل راكب مكان مخصص وحزامه الخاص.</li><li>الحزام السفلي منخفض على الحوض، والعلوي على الكتف والصدر.</li><li>لا يمر الحزام تحت الذراع أو خلف الظهر.</li><li>تأكد من تثبيت مقعد الطفل وفق تعليماته وتعليمات السيارة.</li></ul>
+            </div>
+          </section>
+
+          <section class="lesson-section exceptions-section" id="child-exceptions">
+            <div class="lesson-section-title"><span>5</span><div><h2>استثناءات قصيرة تظهر في الأسئلة</h2><p>هي استثناءات قانونية ضيقة، وليست طريقة سفر معتادة.</p></div></div>
+            <div class="exception-grid">
+              <article><strong>3 سنوات أو أكثر وأقل من 135 سم</strong><p>في نقل مؤقت لمسافة قصيرة، إذا تعذر استخدام حماية خاصة، يستخدم الطفل الحزام إن أمكن ولا يجلس في المقعد الأمامي.</p></article>
+              <article><strong>أقل من 3 سنوات في سيارة أجرة</strong><p>يجوز استثنائيًا في رحلة مؤقتة قصيرة دون حماية خاصة، بشرط ألا يجلس الطفل في المقعد الأمامي.</p></article>
+            </div>
+          </section>
+
+          <section class="lesson-section scenario-section">
+            <div class="lesson-section-title"><span>6</span><div><h2>اختبر فهمك بسرعة</h2><p>فكّر أولًا، ثم افتح الإجابة.</p></div></div>
+            <div class="scenario-grid">
+              <details><summary>طفل طوله 130 سم: هل يكفي حزام السيارة وحده؟</summary><p><strong>لا كقاعدة أساسية.</strong> لأنه أقل من 135 سم ويحتاج وسيلة حماية خاصة مناسبة، مثل المقعد أو الوسادة الرافعة.</p></details>
+              <details><summary>هل يجوز وضع مقعد مواجه للخلف في الأمام؟</summary><p><strong>نعم فقط إذا لم توجد وسادة أمامية أو كانت معطلة بالطريقة الصحيحة.</strong> لا يجوز أمام وسادة فعّالة.</p></details>
+              <details><summary>راكب عمره 12 سنة لم يربط الحزام: من المسؤول؟</summary><p><strong>السائق.</strong> لأن السائق مسؤول عن التأكد من حماية الركاب الذين تقل أعمارهم عن 15 سنة.</p></details>
+            </div>
+          </section>
+
+          <section class="lesson-summary children-summary">
+            <div><span>تذكّر في الاختبار</span><h2>طول الطفل، اتجاه المقعد، ثم عمر الراكب</h2><ol><li>أقل من 135 سم يحتاج حماية خاصة.</li><li>المواجهة للخلف تحمي رقبة الطفل الصغير.</li><li>لا مقعد خلفي الاتجاه أمام وسادة فعّالة.</li><li>السائق مسؤول عن حماية من هم دون 15 سنة.</li></ol></div>
+            <div class="summary-actions"><button id="practice-children-topic" type="button">أسئلة الأطفال والمقاعد ←</button><button id="practice-passengers-topic" type="button">أسئلة الركاب والأحزمة ←</button></div>
+          </section>
+        </article>
+        <article class="theory-lesson speed-lesson" id="speed-lesson" hidden>
+          <button class="theory-back" id="back-from-speed" type="button">→ جميع الدروس</button>
+          <header class="lesson-hero speed-hero">
+            <div>
+              <span class="lesson-number">04</span><span class="theory-kicker">السرعة ومسافات القيادة</span>
+              <h1>كل متر قبل الفرامل مهم</h1>
+              <p>عندما ترى خطرًا، تواصل السيارة السير خلال وقت ردّ فعلك، ثم تحتاج مسافة أخرى للكبح. افهم المرحلتين، وستحلّ الأسئلة حتى لو تغيّرت الأرقام.</p>
+            </div>
+            <div class="memory-rule speed-memory">
+              <span>قاعدة الدرس</span>
+              <strong>مسافة التوقف = مسافة ردّ الفعل + مسافة الكبح</strong>
+              <small>عند مضاعفة السرعة: ردّ الفعل ×2، والكبح يقارب ×4 إذا بقيت ظروف الكبح نفسها.</small>
+            </div>
+          </header>
+          <nav class="lesson-jumps" aria-label="أجزاء الدرس">
+            <a href="#speed-three-distances">المسافات الثلاث</a><a href="#speed-reaction">ردّ الفعل</a><a href="#speed-braking">الكبح</a><a href="#speed-calculators">احسب بنفسك</a><a href="#speed-law">القيادة الآمنة</a>
+          </nav>
+          <section class="lesson-section" id="speed-three-distances">
+            <div class="lesson-section-title"><span>1</span><div><h2>قسّم مسافة التوقف إلى مرحلتين</h2><p>حدّد أولًا ما الذي يسألك عنه السؤال.</p></div></div>
+            <div class="speed-distance-flow">
+              <article class="speed-flow-reaction"><span>ألاحظ الخطر</span><strong>مسافة ردّ الفعل</strong><p>من رؤية الخطر حتى بدء الضغط على الفرامل. السيارة لم تبدأ بالكبح بعد.</p></article>
+              <b aria-hidden="true">＋</b>
+              <article class="speed-flow-braking"><span>أضغط الفرامل</span><strong>مسافة الكبح</strong><p>من بدء الكبح حتى تتوقف السيارة تمامًا. تتأثر خصوصًا بالسرعة والتماسك.</p></article>
+              <b aria-hidden="true">＝</b>
+              <article class="speed-flow-stop"><span>توقّفت السيارة</span><strong>مسافة التوقف</strong><p>المسافة الكاملة من ملاحظة الخطر إلى التوقف.</p></article>
+            </div>
+            <div class="worked-example speed-worked-example"><span class="example-label">مثال سريع</span><h3>قطعت 14 مترًا قبل الكبح و21 مترًا أثناءه</h3><div class="calculation"><span>14 m</span><i>+</i><span>21 m</span><i>=</i><strong>35 m</strong></div><p>إذن مسافة التوقف 35 مترًا؛ لا تخلطها بمسافة الكبح وحدها.</p></div>
+          </section>
+          <section class="lesson-section" id="speed-reaction">
+            <div class="lesson-section-title"><span>2</span><div><h2>احسب مسافة ردّ الفعل</h2><p>حوّل السرعة من كم/ساعة إلى متر/ثانية، ثم اضرب في زمن ردّ الفعل.</p></div></div>
+            <div class="speed-formula-banner"><strong>المسافة بالمتر = (السرعة كم/ساعة ÷ 3.6) × الزمن بالثواني</strong><p>عند 50 كم/ساعة، تسير السيارة نحو 13.9 مترًا في ثانية واحدة، حتى قبل بدء الكبح.</p></div>
+            <div class="speed-example-grid"><article><span>50 كم/ساعة · ثانية واحدة</span><strong>≈ 14 مترًا</strong><p>50 ÷ 3.6 ≈ 13.9</p></article><article><span>90 كم/ساعة · ثانية واحدة</span><strong>25 مترًا</strong><p>90 ÷ 3.6 = 25</p></article><article><span>90 كم/ساعة · ثانيتان</span><strong>50 مترًا</strong><p>25 × 2 = 50؛ طول زمن الانتباه يطيل المسافة.</p></article></div>
+            <div class="important-note"><span>!</span><p>الثانية الواحدة هنا <strong>افتراض للحساب</strong>، وليست زمن ردّ فعل ثابتًا لكل سائق. التعب أو التشتت قد يزيدان الزمن كثيرًا.</p></div>
+          </section>
+          <section class="lesson-section" id="speed-braking">
+            <div class="lesson-section-title"><span>3</span><div><h2>لماذا تزيد مسافة الكبح بسرعة؟</h2><p>إذا بقي التماسك وقوة الكبح كما هما، فمسافة الكبح تتناسب تقريبًا مع مربع السرعة.</p></div></div>
+            <div class="speed-ratio-grid"><article class="speed-ratio-green"><small>السرعة</small><strong>×2</strong><span>مثل 50 ← 100 كم/ساعة</span></article><article class="speed-ratio-blue"><small>مسافة ردّ الفعل</small><strong>×2</strong><span>إذا بقي زمن ردّ الفعل نفسه</span></article><article class="speed-ratio-rose"><small>مسافة الكبح</small><strong>≈ ×4</strong><span>إذا بقيت ظروف الكبح نفسها</span></article></div>
+            <div class="worked-example speed-worked-example"><span class="example-label">فكّر بالنِّسَب، لا برقم محفوظ</span><h3>لو كانت مسافة الكبح 20 مترًا عند 50 كم/ساعة</h3><div class="calculation"><span>20 m</span><i>×</i><span>(100 ÷ 50)²</span><i>=</i><strong>80 m</strong></div><p>هذه مقارنة حسابية في الظروف نفسها، وليست وعدًا بأن سيارة حقيقية ستقف في 80 مترًا.</p></div>
+            <div class="important-note"><span>!</span><p>المطر أو الجليد أو الإطارات الضعيفة أو الحمولة تغيّر مسافة الكبح الفعلية. لا تستعمل مثالًا حسابيًا لتحديد مسافة أمان ثابتة.</p></div>
+          </section>
+          <section class="lesson-section calculator-section" id="speed-calculators">
+            <div class="lesson-section-title"><span>4</span><div><h2>احسب بنفسك</h2><p>غيّر الأرقام لترى الفكرة، ثم جرّب سؤالًا مختلفًا.</p></div></div>
+            <div class="speed-calculator-grid">
+              <form class="theory-calculator" id="reaction-calculator"><h3>مسافة ردّ الفعل</h3><label>السرعة (كم/ساعة)<input id="reaction-speed" type="number" min="1" max="300" step="any" value="50" required></label><label>زمن ردّ الفعل (ثانية)<input id="reaction-time" type="number" min="0.1" max="10" step="any" value="1" required></label><button type="submit">احسب المسافة</button><output class="calculator-result" id="reaction-result" aria-live="polite">مثال: 50 كم/ساعة خلال ثانية واحدة ≈ 13.9 مترًا.</output></form>
+              <form class="theory-calculator" id="braking-ratio-calculator"><h3>تغيّر مسافة الكبح</h3><label>السرعة الأولى (كم/ساعة)<input id="braking-speed-first" type="number" min="1" max="300" step="any" value="50" required></label><label>السرعة الثانية (كم/ساعة)<input id="braking-speed-second" type="number" min="1" max="300" step="any" value="100" required></label><button type="submit">قارن السرعتين</button><output class="calculator-result" id="braking-ratio-result" aria-live="polite">مثال: 50 ← 100 كم/ساعة، فتقارب مسافة الكبح أربعة أمثالها.</output></form>
+              <form class="theory-calculator" id="stopping-calculator"><h3>مسافة التوقف</h3><label>مسافة ردّ الفعل المعطاة (متر)<input id="stopping-reaction" type="number" min="0" max="10000" step="any" value="14" required></label><label>مسافة الكبح المعطاة (متر)<input id="stopping-braking" type="number" min="0" max="10000" step="any" value="21" required></label><button type="submit">احسب المجموع</button><output class="calculator-result" id="stopping-result" aria-live="polite">مثال: 14 + 21 = 35 مترًا.</output></form>
+            </div>
+            <p class="calculator-disclaimer">هذه أدوات تعليمية للحساب، ولا تتنبأ بمسافة توقف سيارة بعينها على الطريق.</p>
+          </section>
+          <section class="lesson-section" id="speed-law">
+            <div class="lesson-section-title"><span>5</span><div><h2>ماذا يعني ذلك أثناء القيادة؟</h2><p>المسألة ليست حدّ السرعة المعلَن فقط؛ يجب أن تستطيع التوقف ضمن الجزء الذي تراه من الطريق.</p></div></div>
+            <div class="speed-law-grid"><article><span>01</span><h3>خفّف السرعة عندما تقصر الرؤية</h3><p>خلف قمة تل أو في الضباب أو الظلام، لا يكفي الالتزام بالحد الأقصى إذا كانت مسافة التوقف أطول مما تراه أمامك.</p></article><article><span>02</span><h3>اترك مسافة كافية أمامك</h3><p>اضبط المسافة حتى لا تصطدم بالمركبة التي أمامك إذا خففت سرعتها أو توقفت. يمكنك استخدام عدّ الثواني كوسيلة تذكير، وزِد المسافة في الظروف الصعبة.</p></article><article><span>03</span><h3>اقرأ ظروف السؤال</h3><p>إذا ذكر السؤال طريقًا زلقًا، فتوقّع كبحًا أطول. وإذا ذكر تشتّت السائق، فتوقّع ردّ فعل أبطأ. كلاهما يزيد مسافة التوقف.</p></article></div>
+            <p class="speed-law-reference">المبدأ القانوني: الفصل الثالث، المادتان 2 و14 من قانون المرور السويدي (Trafikförordningen).</p>
+          </section>
+          <section class="lesson-section scenario-section"><div class="lesson-section-title"><span>6</span><div><h2>اختبر فهمك</h2><p>افتح الإجابة بعد أن تحاول بنفسك.</p></div></div><div class="scenario-grid"><details><summary>إذا تضاعفت السرعة وبقي زمن ردّ الفعل نفسه، ماذا يحدث لمسافة ردّ الفعل؟</summary><p>تتضاعف؛ لأن المسافة = السرعة بالمتر/ثانية × الزمن نفسه.</p></details><details><summary>إذا تضاعفت السرعة وبقيت ظروف الكبح نفسها، ماذا يحدث تقريبًا لمسافة الكبح؟</summary><p>تصير نحو أربعة أمثالها؛ لأن النسبة تُربّع: 2² = 4.</p></details><details><summary>ردّ الفعل 18 مترًا والكبح 32 مترًا: كم مسافة التوقف؟</summary><p>50 مترًا؛ اجمع المرحلتين: 18 + 32.</p></details></div></section>
+          <section class="lesson-summary speed-summary"><div><span>تذكّر في الاختبار</span><h2>ردّ الفعل + الكبح = التوقف</h2><ol><li>السرعة ÷ 3.6 تعطي أمتارًا في الثانية.</li><li>ردّ الفعل = السرعة بالمتر/ثانية × زمن الانتباه.</li><li>مضاعفة السرعة تجعل الكبح نحو أربعة أمثاله في الظروف نفسها.</li><li>قُد بحيث تستطيع التوقف ضمن ما تراه وبمسافة كافية عن المركبة أمامك.</li></ol></div><div class="summary-actions"><button id="practice-speed-safety-topic" type="button">أسئلة السرعة ومسافات الأمان ←</button><button id="practice-speed-rules-topic" type="button">أسئلة قواعد السرعة ←</button></div></section>
+        </article>
+        <article class="theory-lesson vehicle-lesson" id="vehicle-lesson" hidden>
+          <button class="theory-back" id="back-from-vehicle" type="button">→ جميع الدروس</button>
+          <header class="lesson-hero vehicle-hero">
+            <div>
+              <span class="lesson-number">05</span><span class="theory-kicker">معرفة المركبة والتحكم بها</span>
+              <h1>اقرأ علامة العطل قبل أن تحفظ الإجابة</h1>
+              <p>في أسئلة المركبة، اسأل نفسك: هل المشكلة تُضعف <strong>التماسك</strong>، أم <strong>التوقف</strong>، أم <strong>الرؤية</strong>؟ عندها يسهل اختيار التصرف الآمن.</p>
+            </div>
+            <div class="memory-rule vehicle-memory"><span>قاعدة سريعة</span><strong>الإطار يمسك الطريق · الفرامل توقف · الأضواء تكشف وتُظهر السيارة</strong><small>أي خلل في واحدة منها قد يجعل القيادة غير آمنة حتى لو اشتغل المحرك.</small></div>
+          </header>
+          <nav class="lesson-jumps" aria-label="أجزاء الدرس"><a href="#vehicle-tyres">الإطارات</a><a href="#vehicle-brakes">الفرامل</a><a href="#vehicle-lights">الإضاءة</a><a href="#vehicle-faults">الأعطال</a><a href="#vehicle-inspection">الفحص</a></nav>
+
+          <section class="lesson-section" id="vehicle-tyres">
+            <div class="lesson-section-title"><span>1</span><div><h2>الإطارات: التماسك يبدأ من هنا</h2><p>النقش والهواء ونوع الإطار تؤثر في قدرتك على التوجيه والكبح.</p></div></div>
+            <div class="vehicle-tyre-grid">
+              <article class="vehicle-metric-card summer"><span>في ظروف الصيف</span><strong>1.6 <small>مم</small></strong><p>الحد الأدنى القانوني لعمق نقش الإطار. هو حد أدنى، وليس ضمانًا لتماسك جيد على طريق مبلل.</p></article>
+              <article class="vehicle-metric-card winter"><span>1 ديسمبر – 31 مارس</span><strong>3 <small>مم</small></strong><p>الحد الأدنى لنقش الإطارات الشتوية للسيارة الخفيفة <strong>عند وجود ظروف شتوية</strong>؛ وهي الثلج أو الجليد أو الوحل الثلجي أو الصقيع على الطريق.</p></article>
+              <article class="vehicle-metric-card rear"><span>أفضل تماسك</span><strong>في الخلف</strong><p>ضع الإطارين الأفضل تماسكًا في الخلف، سواء كانت السيارة أمامية الدفع أم خلفية الدفع؛ لتقليل خطر انزلاق المؤخرة في المنعطف أو عند الكبح.</p></article>
+            </div>
+            <div class="vehicle-cause-strip"><b>ضغط غير صحيح</b><span>←</span><p>تتغير استجابة السيارة ويزداد تآكل الإطار أو استهلاك الوقود. اقرأ الضغط المناسب في دليل سيارتك، ولا تخمّن قيمة واحدة لكل السيارات.</p></div>
+            <div class="important-note"><span>!</span><p>عند حدوث ثقب أو تلف واضح، ابحث عن مكان آمن للتوقف. لا تواصل القيادة على إطار فقد ضغطه وكأن شيئًا لم يحدث.</p></div>
+          </section>
+
+          <section class="lesson-section" id="vehicle-brakes">
+            <div class="lesson-section-title"><span>2</span><div><h2>الفرامل: فرّق بين إيقاف السيارة والتحكم بها</h2><p>اقرأ وظيفة النظام قبل أن تفسّر لمبة التحذير.</p></div></div>
+            <div class="vehicle-brake-grid">
+              <article><span class="vehicle-feature-icon">▣</span><h3>فرامل الخدمة</h3><p>هي الفرامل التي تستخدمها لإبطاء السيارة أثناء القيادة. ضعف فعاليتها أو تغيّر إحساس الدواسة علامة تستدعي فحصًا؛ لا تؤجلها إلى الخدمة الدورية.</p></article>
+              <article><span class="vehicle-feature-icon">P</span><h3>فرامل التوقف</h3><p>تثبت السيارة عند الوقوف. لا تجعل اسمها يختلط بفرامل الخدمة في سؤال عن الكبح أثناء السير.</p></article>
+              <article><span class="vehicle-feature-icon">ABS</span><h3>نظام منع انغلاق العجلات</h3><p>يساعد على بقاء العجلات قابلة للتوجيه أثناء الكبح القوي. وجوده لا يلغي الحاجة إلى مسافة أمان ولا يضمن مسافة كبح أقصر في كل طريق.</p></article>
+            </div>
+            <div class="vehicle-decision-card"><strong>إذا ظهرت لمبة عطل الفرامل أو أصبحت الدواسة غير طبيعية</strong><p>خفف السرعة، توقف في مكان آمن، وافحص سبب المشكلة قبل متابعة القيادة. وإذا ظهرت لمبة ABS وحدها، فهذا يشير إلى خلل في النظام المساعد ويحتاج فحصًا؛ لا تفترض أن قدرة الكبح أو التوجيه كما كانت.</p></div>
+          </section>
+
+          <section class="lesson-section" id="vehicle-lights">
+            <div class="lesson-section-title"><span>3</span><div><h2>الإضاءة: ترى الطريق ويراك الآخرون</h2><p>اسأل: هل هو نهار واضح، أم فجر أو غسق أو ظلام أو طقس سيئ؟</p></div></div>
+            <div class="vehicle-light-grid">
+              <article class="day"><span>☀</span><h3>نهار واضح</h3><p>استخدم الضوء المنخفض أو ضوء نهاريًا آخر مسموحًا. بعض السيارات لا تُضيء مصابيحها الخلفية مع أضواء النهار، وهذا مسموح في ضوء النهار الواضح.</p></article>
+              <article class="dusk"><span>◐</span><h3>غسق، ظلام أو رؤية سيئة</h3><p>تأكد من عمل الضوء الأمامي المناسب والمصابيح الخلفية. وضع «تلقائي» لا يكفي دائمًا؛ قد تحتاج تشغيل الأضواء بنفسك في المطر أو الضباب.</p></article>
+              <article class="beam"><span>✧</span><h3>الضوء العالي</h3><p>يفيد عندما تحتاج رؤية أبعد، لكن خفّضه إذا كان قد يُبهر سائقًا قادمًا أو أمامك.</p></article>
+            </div>
+            <div class="vehicle-light-combinations">
+              <div class="vehicle-light-combinations-heading"><div><span>دليل الأضواء</span><h3>أي أضواء يمكن تشغيلها معًا؟</h3></div><p>ميّز بين <strong>القيادة</strong> و<strong>الوقوف</strong>، وبين الضباب الأمامي والخلفي.</p></div>
+              <div class="vehicle-light-combination-grid">
+                <article class="allowed"><span>✓ مسموح</span><strong>الضوء المنخفض + أضواء الموضع والخلفية</strong><p>الضوء المنخفض ينير الطريق، وتُظهر أضواء الموضع والخلفية السيارة للآخرين.</p></article>
+                <article class="allowed"><span>✓ مسموح نهارًا</span><strong>ضوء الضباب الأمامي + أضواء الوقوف</strong><p>في ضوء النهار يمكن استعمال الضباب الأمامي بدل الضوء المنخفض. إذا تعطّل مصباح الضوء المنخفض في سؤال التطبيق <b>q423</b>، فهذه هي الإجابة؛ أصلح المصباح المعطّل.</p></article>
+                <article class="forbidden"><span>✕ غير مسموح</span><strong>الضوء المنخفض + ضوء الضباب الأمامي</strong><p>الضباب الأمامي بديل للضوء المنخفض في الحالات التي يسمح بها القانون، لا إضافة إليه.</p></article>
+                <article class="forbidden"><span>✕ غير مسموح</span><strong>الضوء المنخفض + مصابيح القيادة النهارية</strong><p>مصابيح القيادة النهارية أيضًا بديل أمامي في النهار الواضح، وليست ضوءًا تجمعه مع الضوء المنخفض.</p></article>
+                <article class="forbidden"><span>✕ أثناء القيادة</span><strong>أضواء الوقوف وحدها</strong><p>تُظهر السيارة لكنها لا تحقق متطلبات إضاءة القيادة؛ لذلك لا تكفي وحدها حتى في نهار واضح.</p></article>
+                <article class="allowed"><span>✓ عند الوقوف ليلًا</span><strong>أضواء الوقوف + المصابيح الخلفية</strong><p>إذا توقفت أو ركنت على طريق في الظلام وتحتاج أن يراك الآخرون، استخدم أضواء الوقوف والخلفية، لا الضوء العالي.</p></article>
+              </div>
+              <div class="vehicle-rear-fog-note"><strong>ضوء الضباب الخلفي حالة مختلفة:</strong> استخدمه فقط في الضباب أو المطر الغزير أو ضعف رؤية مشابه، وأطفئه إذا كان سيُبهر السائق خلفك.</div>
+            </div>
+            <div class="vehicle-cause-strip"><b>سؤال شائع</b><span>←</span><p>هل تعمل المصابيح الخلفية دائمًا مع أضواء النهار؟ <strong>لا.</strong> لذلك افحصها بنفسك عند انخفاض الرؤية.</p></div>
+          </section>
+
+          <section class="lesson-section" id="vehicle-faults">
+            <div class="lesson-section-title"><span>4</span><div><h2>الأعطال: سلامتك أولًا، ثم تشخيص السبب</h2><p>لا تحوّل علامة تحذير خطيرة إلى سؤال حفظ؛ اربطها بالخطر المحتمل.</p></div></div>
+            <div class="vehicle-fault-flow"><article><span>1</span><strong>لاحظ المشكلة</strong><p>صوت غير معتاد، ضعف فرامل، حرارة مرتفعة، أو لمبة تحذير.</p></article><b aria-hidden="true">←</b><article><span>2</span><strong>خفف وتوقف بأمان</strong><p>إذا أثّرت المشكلة في التحكم أو قد تُتلف المحرك، لا تواصل القيادة إلى وجهتك.</p></article><b aria-hidden="true">←</b><article><span>3</span><strong>حذّر واطلب المساعدة</strong><p>شغّل أضواء التحذير. على الطرق التي يزيد حدها عن 50 كم/ساعة، تُوضع مثلث التحذير إذا أمكن ذلك بأمان.</p></article></div>
+            <div class="vehicle-warning-grid"><article><strong>ضغط زيت المحرك</strong><p>إذا حذّرتك السيارة من انخفاض ضغط الزيت، توقف بأمان وأوقف المحرك. مواصلة تشغيله قد تسبب تلفًا كبيرًا.</p></article><article><strong>ارتفاع حرارة المحرك</strong><p>توقف بأمان ودع المحرك يبرد. لا تفتح غطاء سائل التبريد وهو ساخن؛ فقد يندفع السائل ويحرقك.</p></article><article><strong>زجاج متسخ أو مسّاحات لا تعمل</strong><p>الرؤية جزء من السلامة. نظف الزجاج وأصلح المسّاحات أو أضف سائل الغسل قبل قيادة تتطلبها.</p></article></div>
+            <p class="vehicle-soft-note">على الطريق السريع أو الطريق ذي الحاجز الوسطي، ابتعد أنت والركاب عن مسار السيارات، واطلب المساعدة من مكان آمن. عند خطر على الحياة اتصل بـ112.</p>
+          </section>
+
+          <section class="lesson-section" id="vehicle-inspection">
+            <div class="lesson-section-title"><span>5</span><div><h2>الفحص: فحصك اليومي غير الفحص الدوري</h2><p>اختبر السؤال: هل يريد «ما الذي أتحقق منه قبل السير؟» أم «متى يجب فحص السيارة رسميًا؟»</p></div></div>
+            <div class="vehicle-inspection-split"><article><span>قبل السير</span><h3>فحص سلامة بسيط</h3><ul><li>الإطارات: التلف والنقش والضغط المناسب.</li><li>الأضواء والإشارات ومسّاحات الزجاج.</li><li>الفرامل والتنبيهات الظاهرة.</li><li>السوائل اللازمة مثل الزيت والتبريد والغسل، بحسب دليل السيارة.</li></ul><p>إذا وجدت خللًا مؤثرًا في السلامة، عالجه قبل الرحلة.</p></article><article><span>رسمي</span><h3>الفحص الدوري لسيارة خفيفة</h3><div class="inspection-timeline"><div><strong>36</strong><small>شهرًا: أول فحص كحد أقصى</small></div><div><strong>24</strong><small>شهرًا بعد شهر الفحص الأول</small></div><div><strong>14</strong><small>شهرًا بعد شهر الفحص السابق لاحقًا</small></div></div><p>تُحسب المواعيد من <strong>شهر</strong> دخول السيارة في الخدمة أو شهر الفحص السابق، لا من تاريخ شراء السيارة.</p></article></div>
+            <div class="important-note"><span>!</span><p>إذا فات موعد الفحص، يدخل حظر قيادة تلقائي. توجد قيود محددة على نقل السيارة إلى الورشة أو محطة الفحص؛ افحص حالة السيارة وموعدها قبل القيادة.</p></div>
+          </section>
+
+          <section class="lesson-section scenario-section"><div class="lesson-section-title"><span>6</span><div><h2>جرّب التفكير مثل السائق</h2><p>اختر جوابك قبل فتح الشرح.</p></div></div><div class="scenario-grid"><details><summary>إطاران جديدان وإطاران مستعملان بحالة مقبولة: أين تضع الأفضل تماسكًا؟</summary><p>في الخلف؛ لأن تماسك الخلف يساعد على منع انزلاق مؤخرة السيارة، بغض النظر عن نوع الدفع.</p></details><details><summary>السيارة على أضواء النهار، وبدأ المطر عند الغسق. ما الذي تتحقق منه؟</summary><p>شغّل الإضاءة المناسبة وتحقق من الأضواء الخلفية؛ فقد لا تعمل تلقائيًا مع أضواء النهار.</p></details><details><summary>متى يكون أول فحص دوري لسيارة خفيفة جديدة؟</summary><p>في موعد لا يتجاوز 36 شهرًا بعد الشهر الذي دخلت فيه الخدمة لأول مرة، وليس بعد 36 شهرًا من تاريخ شرائها منك.</p></details></div></section>
+          <section class="lesson-summary vehicle-summary"><div><span>تذكّر في الاختبار</span><h2>لاحظ السبب ثم اختر التصرف</h2><ol><li>الإطار الجيد يحافظ على التماسك؛ الأفضل في الخلف.</li><li>ABS يساعد على التوجيه أثناء الكبح، ولا يلغي مسافة الأمان.</li><li>في ضعف الرؤية، تأكد من الإضاءة الأمامية والخلفية.</li><li>عطل مؤثر في السلامة يعني توقفًا آمنًا وفحصًا، لا مواصلة الرحلة.</li><li>الفحص الدوري: 36 ثم 24 ثم 14 شهرًا لسيارة خفيفة.</li></ol></div><div class="summary-actions"><button id="practice-vehicle-tyres" type="button">أسئلة الإطارات ←</button><button id="practice-vehicle-brakes" type="button">أسئلة الفرامل ←</button><button id="practice-vehicle-lights" type="button">أسئلة الإضاءة ←</button><button id="practice-vehicle-inspection" type="button">أسئلة الصيانة والفحص ←</button></div></section>
+        </article>
       </section>
 
       <section class="app-shell" id="quiz-view" hidden>
@@ -151,6 +649,9 @@
       <button class="active" id="bottom-home-button" type="button" data-tab="home">
         <span aria-hidden="true">⌂</span><strong id="bottom-home-label">الرئيسية</strong>
       </button>
+      <button id="bottom-theory-button" type="button" data-tab="theory">
+        <span aria-hidden="true">▤</span><strong id="bottom-theory-label">النظرية</strong>
+      </button>
       <button id="bottom-areas-button" type="button" data-tab="areas">
         <span aria-hidden="true">◎</span><strong id="bottom-areas-label">التدريب</strong>
       </button>
@@ -162,16 +663,16 @@
       </button>
     </nav>
 
-    <script src="./data/batch1-raw.js?v=62"></script>
-    <script src="./data/batch1-ar.js?v=62"></script>
-    <script src="./data/batch1-review-ar.js?v=62"></script>
-    <script src="./data/remaining-enriched.js?v=62"></script>
-    <script src="./data/resolved-review.js?v=62"></script>
-    <script src="./data/prov1-gpt-ar.js?v=62"></script>
-    <script src="./data/prov2-gpt-ar.js?v=62"></script>
-    <script src="./data/rules100-gpt-ar.js?v=62"></script>
-    <script src="./data/cleanup-reviewed-ar.js?v=62"></script>
-    <script src="./data/sample-ten-ar.js?v=62"></script>
-    <script src="./app.js?v=62"></script>
+    <script src="./data/batch1-raw.js?v=69"></script>
+    <script src="./data/batch1-ar.js?v=69"></script>
+    <script src="./data/batch1-review-ar.js?v=69"></script>
+    <script src="./data/remaining-enriched.js?v=69"></script>
+    <script src="./data/resolved-review.js?v=69"></script>
+    <script src="./data/prov1-gpt-ar.js?v=69"></script>
+    <script src="./data/prov2-gpt-ar.js?v=69"></script>
+    <script src="./data/rules100-gpt-ar.js?v=69"></script>
+    <script src="./data/cleanup-reviewed-ar.js?v=69"></script>
+    <script src="./data/sample-ten-ar.js?v=69"></script>
+    <script src="./app.js?v=69"></script>
   </body>
 </html>
